@@ -165,7 +165,11 @@ function Scene({
 
   return (
     <>
-      <ambientLight intensity={0.3} />
+      <ambientLight intensity={0.15} />
+      {/* Sky-ground ambient bounce: sky=dim blue, ground=warm gray */}
+      <hemisphereLight
+        args={['#8899bb', '#665544', 0.4]}
+      />
 
       {enabledLights.map((light) => (
         <directionalLight
@@ -207,17 +211,17 @@ function Scene({
         />
       </mesh>
 
-      {/* Ground plane — desk/display surface for ambient light reflection */}
+      {/* Ground plane — model sits on this surface, receives light + reflects back */}
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, -1.3, 0]}
+        position={[0, -1, 0]}
         receiveShadow
       >
-        <planeGeometry args={[12, 12]} />
+        <planeGeometry args={[10, 10]} />
         <meshStandardMaterial
-          color="#888888"
-          roughness={0.4}
-          metalness={0.1}
+          color="#998877"
+          roughness={0.5}
+          metalness={0.05}
         />
       </mesh>
 
