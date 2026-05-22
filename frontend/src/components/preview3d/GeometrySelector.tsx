@@ -5,6 +5,7 @@ type GeometryType = 'sphere' | 'cube' | 'cylinder';
 interface GeometrySelectorProps {
   value: GeometryType;
   onChange: (value: GeometryType) => void;
+  modelName?: string | null;
 }
 
 const OPTIONS: { value: GeometryType; label: string }[] = [
@@ -16,7 +17,10 @@ const OPTIONS: { value: GeometryType; label: string }[] = [
 export default function GeometrySelector({
   value,
   onChange,
+  modelName,
 }: GeometrySelectorProps) {
+  const isModelSelected = !!modelName;
+
   const styles: Record<string, React.CSSProperties> = {
     container: {
       backgroundColor: '#2b2d31',
@@ -33,6 +37,7 @@ export default function GeometrySelector({
     radioGroup: {
       display: 'flex',
       gap: '8px',
+      flexWrap: 'wrap',
     },
     radioLabel: {
       display: 'flex',
@@ -64,20 +69,38 @@ export default function GeometrySelector({
             key={opt.value}
             style={{
               ...styles.radioLabel,
-              ...(value === opt.value ? styles.radioLabelActive : {}),
+              ...(!isModelSelected && value === opt.value ? styles.radioLabelActive : {}),
             }}
           >
             <input
               type="radio"
               name="geometry"
               value={opt.value}
-              checked={value === opt.value}
+              checked={!isModelSelected && value === opt.value}
               onChange={() => onChange(opt.value)}
               style={styles.radio}
             />
             {opt.label}
           </label>
         ))}
+        {modelName && (
+          <label
+            style={{
+              ...styles.radioLabel,
+              ...(isModelSelected ? styles.radioLabelActive : {}),
+            }}
+          >
+            <input
+              type="radio"
+              name="geometry"
+              value="model"
+              checked={isModelSelected}
+              onChange={() => {}}
+              style={styles.radio}
+            />
+            {modelName}
+          </label>
+        )}
       </div>
     </div>
   );
