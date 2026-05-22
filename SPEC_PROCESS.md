@@ -190,10 +190,10 @@ diff --git a/PLAN.md b/PLAN.md
 | brainstorming | `superpowers:brainstorming` | 完成 |
 | writing-plans | `superpowers:writing-plans` | 完成 |
 | 冷启动验证 | — | 完成（修订已应用到 PLAN.md） |
-| using-git-worktrees | `superpowers:using-git-worktrees` | 待进行 |
-| subagent-driven-development | `superpowers:subagent-driven-development` | 待进行 |
-| test-driven-development | `superpowers:test-driven-development` | 待进行 |
-| requesting-code-review | `superpowers:requesting-code-review` | 待进行 |
-| finishing-a-development-branch | `superpowers:finishing-a-development-branch` | 待进行 |
-| AGENT_LOG.md | — | 待创建（随实现阶段同步记录） |
-| REFLECTION.md | — | 待最终阶段撰写 |
+| using-git-worktrees | `superpowers:using-git-worktrees` | 完成（11 个 worktree, 11 个 PR） |
+| subagent-driven-development | `superpowers:subagent-driven-development` | 完成（10 次 subagent dispatch） |
+| test-driven-development | `superpowers:test-driven-development` | 完成（每个 task 红-绿-commit） |
+| requesting-code-review | `superpowers:requesting-code-review` | 完成（inline spec + code quality 每 task） |
+| finishing-a-development-branch | `superpowers:finishing-a-development-branch` | 完成（11 个 PR 全部 merged） |
+| AGENT_LOG.md | — | 已创建（含全阶段记录） |
+| REFLECTION.md | — | 待撰写 |

@@ -93,3 +93,109 @@
 - 两个 task 均通过 subagent TDD 完成，无人工干预
 - 全量测试回归保持绿（9/9 tests）
 - 漆料库支持 5 个主流品牌 + Other 自定义品牌
+
+---
+
+## Phase 3: 混色引擎
+
+### 2026-05-22 — Task 3.1 Mix Engine（subagent）
+
+| 项目 | 详情 |
+|------|------|
+| **Commit** | `f66484d` |
+| **Subagent** | Claude subagent, TDD |
+| **创建文件** | MixRequest, MixCandidate, MixResponse DTOs; MixService (brute-force); MixController |
+| **TDD** | 红 → 绿（4/4 MixServiceTest）→ 全量 13/13 绿 |
+| **算法** | 份数制暴力搜索，双漆 1:1~4:1，三漆 1:1:1~1:1:3，ΔE 欧几里得排序，TOP-10；三原色 CMY 参考基线；"少量"自动标记 |
+| **PR** | #4 |
+
+---
+
+## Phase 4: 配方管理
+
+### 2026-05-22 — Task 4.1 Recipe CRUD（subagent）
+
+| 项目 | 详情 |
+|------|------|
+| **Commit** | `d159592` |
+| **Subagent** | Claude subagent, TDD |
+| **创建文件** | Recipe, RecipeComponent entities; repos; RecipeRequest/Response DTOs; RecipeService; RecipeController |
+| **TDD** | 红 → 绿（2/2 RecipeServiceTest）→ 全量 15/15 绿 |
+| **PR** | #5 |
+
+---
+
+## Phase 5: 3D预览后端
+
+### 2026-05-22 — Task 5.1 STL upload + Settings（subagent）
+
+| 项目 | 详情 |
+|------|------|
+| **Commit** | `c3dec90` |
+| **Subagent** | Claude subagent, TDD |
+| **创建文件** | SavedModel + UserSettings entities; repos; DTOs; ModelService + UserSettingsService; ModelController + UserSettingsController; 12 files total |
+| **API** | POST/GET/DELETE /api/models (STL 50MB max), GET/PUT /api/settings |
+| **PR** | #6 |
+
+---
+
+## Phase 7-10: 前端开发
+
+### Phase 7: API client + Auth pages (PR #7)
+
+| 项目 | 详情 |
+|------|------|
+| **Commit** | `90e2811` |
+| **Subagent** | Claude subagent |
+| **创建文件** | types/index.ts, api/client.ts + auth/paints/mix/recipes.ts, store/authStore.ts, 5 auth pages, ProtectedRoute, index.css, App.tsx updated |
+| **设计** | Discord 暗色主题全局应用 |
+| **Build** | TypeScript + Vite 零错误 |
+
+### Phase 8: Paint library frontend + PhotoColorPicker (PR #8)
+
+| 项目 | 详情 |
+|------|------|
+| **Commit** | `81f4d65` |
+| **Subagent** | Claude subagent |
+| **创建文件** | PaintList (table + filter), PaintForm (modal + validation), PhotoColorPicker (Canvas sampling), paintStore (Zustand), DashboardPage stub |
+
+### Phase 9: Dashboard layout + 3D preview (PR #9)
+
+| 项目 | 详情 |
+|------|------|
+| **Commit** | `c1a6eb7` |
+| **Subagent** | Claude subagent |
+| **创建文件** | TargetColorPicker, MixResultCard/List, MaterialBall (R3F), Lighting/Material/Geometry controls, StlUploader, models.ts API, DashboardPage rewritten (3-column grid) |
+| **3D** | React Three Fiber + OrbitControls + MeshStandardMaterial + STLLoader |
+
+### Phase 10: Color wheel + Recipe UI (PR #10)
+
+| 项目 | 详情 |
+|------|------|
+| **Commit** | `2bd63e9` |
+| **Subagent** | Claude subagent |
+| **创建文件** | ColorWheel (HSV conic-gradient + harmonies), RecipeList, RecipeCard, recipeStore |
+| **Dashboard** | 添加 ColorWheel toggle + Paints/Recipes tab bar |
+
+---
+
+## Phase 11: CI + Makefile + README (PR #11)
+
+| 项目 | 详情 |
+|------|------|
+| **Commit** | `76a6af0` |
+| **实现方式** | 直接实现（静态配置文件） |
+| **创建文件** | .github/workflows/ci.yml, Makefile, README.md |
+
+---
+
+## 总体统计
+
+| 指标 | 数据 |
+|------|------|
+| **总 PR 数** | 11 |
+| **Subagent dispatch 次数** | 10 (Phase 0 权限被拒 → inline; Phases 1-10 均 subagent) |
+| **TDD 测试总数** | 17 (后端) + 前端构建验证 |
+| **创建文件数** | ~85+ |
+| **Subagent 成功率** | 10/11 (1 次权限问题，修复后 100%) |
+| **偏离 Superpowers 流程** | Phase 0（subagent 权限被拒→inline，已记录）；Phase 11（静态文件→直接实现） |
