@@ -2,6 +2,8 @@ import React, { useState, useCallback } from 'react';
 import PaintList from '../components/paint/PaintList';
 import TargetColorPicker from '../components/mix/TargetColorPicker';
 import MixResultList from '../components/mix/MixResultList';
+import ColorWheel from '../components/mix/ColorWheel';
+import RecipeList from '../components/recipe/RecipeList';
 import MaterialBall from '../components/preview3d/MaterialBall';
 import LightingControls from '../components/preview3d/LightingControls';
 import MaterialControls from '../components/preview3d/MaterialControls';
@@ -10,6 +12,7 @@ import StlUploader from '../components/preview3d/StlUploader';
 import type { MixResponse } from '../types';
 
 type GeometryType = 'sphere' | 'cube' | 'cylinder';
+type LeftTab = 'paints' | 'recipes';
 
 export default function DashboardPage() {
   const [mixResult, setMixResult] = useState<MixResponse | null>(null);
@@ -21,6 +24,8 @@ export default function DashboardPage() {
   const [lightIntensity, setLightIntensity] = useState(1.5);
   const [hasMixColor, setHasMixColor] = useState(false);
   const [showPaintList, setShowPaintList] = useState(true);
+  const [showColorWheel, setShowColorWheel] = useState(false);
+  const [leftTab, setLeftTab] = useState<LeftTab>('paints');
 
   const handleMixResult = useCallback((result: MixResponse) => {
     setMixResult(result);
@@ -91,6 +96,8 @@ export default function DashboardPage() {
     leftColumn: {
       overflowY: 'auto',
       minHeight: 0,
+      display: 'flex',
+      flexDirection: 'column',
     },
     centerColumn: {
       overflowY: 'auto',
@@ -104,6 +111,29 @@ export default function DashboardPage() {
       display: 'flex',
       flexDirection: 'column',
     },
+    tabBar: {
+      display: 'flex',
+      gap: '0',
+      backgroundColor: '#2b2d31',
+      borderRadius: '8px 8px 0 0',
+    },
+    tab: {
+      flex: 1,
+      padding: '10px 16px',
+      backgroundColor: 'transparent',
+      border: 'none',
+      borderBottom: '2px solid transparent',
+      color: '#949ba0',
+      fontSize: '13px',
+      fontWeight: 600,
+      cursor: 'pointer',
+      transition: 'color 0.15s, border-color 0.15s',
+    },
+    tabContent: {
+      flex: 1,
+      minHeight: 0,
+      overflowY: 'auto',
+    },
   };
 
   return (
@@ -113,25 +143,61 @@ export default function DashboardPage() {
           <h1 style={styles.heading}>Dashboard</h1>
           <p style={styles.subtitle}>Mix paints and preview in 3D</p>
         </div>
-        <button
-          onClick={() => setShowPaintList(!showPaintList)}
-          style={styles.togglePaintBtn}
-        >
-          {showPaintList ? 'Hide Paint List' : 'Show Paint List'}
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button
+            onClick={() => setShowColorWheel(!showColorWheel)}
+            style={{
+              ...styles.togglePaintBtn,
+              backgroundColor: showColorWheel ? '#5865f2' : '#4e5058',
+            }}
+          >
+            {showColorWheel ? 'Hide Color Wheel' : 'Color Wheel'}
+          </button>
+          <button
+            onClick={() => setShowPaintList(!showPaintList)}
+            style={styles.togglePaintBtn}
+          >
+            {showPaintList ? 'Hide Paint List' : 'Show Paint List'}
+          </button>
+        </div>
       </div>
 
       <div style={styles.grid}>
-        {/* Left Column: Paint List */}
+        {/* Left Column: Paint List / Recipes */}
         <div
           style={styles.leftColumn}
           hidden={!showPaintList}
         >
-          <PaintList />
+          <div style={styles.tabBar}>
+            <button
+              onClick={() => setLeftTab('paints')}
+              style={{
+                ...styles.tab,
+                ...(leftTab === 'paints' ? { color: '#dbdee1', borderBottomColor: '#5865f2' } : {}),
+              }}
+            >
+              Paints
+            </button>
+            <button
+              onClick={() => setLeftTab('recipes')}
+              style={{
+                ...styles.tab,
+                ...(leftTab === 'recipes' ? { color: '#dbdee1', borderBottomColor: '#5865f2' } : {}),
+              }}
+            >
+              Recipes
+            </button>
+          </div>
+          <div style={styles.tabContent}>
+            {leftTab === 'paints' ? <PaintList /> : <RecipeList />}
+          </div>
         </div>
 
-        {/* Center Column: Target Color + Mix Results */}
+        {/* Center Column: Color Wheel + Target Color + Mix Results */}
         <div style={styles.centerColumn}>
+          {showColorWheel && (
+            <ColorWheel onColorSelected={handleColorSelected} />
+          )}
           <TargetColorPicker
             onMixResult={handleMixResult}
             onColorSelected={handleColorSelected}
