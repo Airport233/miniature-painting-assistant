@@ -1886,6 +1886,8 @@ git commit -m "feat: add paint photo upload with local storage"
 
 ### Task 3.1: Mix algorithm + endpoint
 
+> **Status:** DONE — subagent, TDD: 4/4 tests, 6 files (brute-force parts-based search, tricolor, Delta E)
+
 **Files:** Create `backend/src/main/java/com/minipaint/dto/MixRequest.java`, `backend/src/main/java/com/minipaint/dto/MixCandidate.java`, `backend/src/main/java/com/minipaint/dto/MixResponse.java`, `backend/src/main/java/com/minipaint/service/MixService.java`, `backend/src/main/java/com/minipaint/controller/MixController.java`; Create test: `backend/src/test/java/com/minipaint/service/MixServiceTest.java`
 
 - [ ] **Step 1: Write failing test**
