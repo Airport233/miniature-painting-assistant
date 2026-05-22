@@ -169,6 +169,7 @@ function Scene({
   return (
     <>
       <ambientLight intensity={0.25} />
+      <gridHelper args={[10, 10, '#4e5058', '#3c3f45']} />
 
       {enabledLights.map((light) => (
         <directionalLight
