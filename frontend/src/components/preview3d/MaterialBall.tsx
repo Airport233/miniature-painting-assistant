@@ -1,16 +1,27 @@
 import React, { useRef, useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, DragControls } from '@react-three/drei';
 import * as THREE from 'three';
 
 type GeometryType = 'sphere' | 'cube' | 'cylinder';
+
+export interface LightConfig {
+  id: string;
+  position: [number, number, number];
+  intensity: number;
+  color: string;
+  enabled: boolean;
+}
 
 interface SceneProps {
   color: string;
   roughness: number;
   metalness: number;
-  lightPos: [number, number, number];
+  lights: LightConfig[];
   geometry: GeometryType;
+  selectedLightId: string | null;
+  onLightSelect: (id: string | null) => void;
+  onLightUpdate: (id: string, updates: Partial<Omit<LightConfig, 'id'>>) => void;
   onColorSampled: (r: number, g: number, b: number) => void;
 }
 
@@ -18,8 +29,11 @@ function Scene({
   color,
   roughness,
   metalness,
-  lightPos,
+  lights,
   geometry,
+  selectedLightId,
+  onLightSelect,
+  onLightUpdate,
   onColorSampled,
 }: SceneProps) {
   const meshRef = useRef<THREE.Mesh>(null);
@@ -60,14 +74,50 @@ function Scene({
     [color, geometry, onColorSampled]
   );
 
+  const enabledLights = lights.filter((l) => l.enabled);
+
   return (
     <>
       <ambientLight intensity={0.3} />
-      <directionalLight
-        position={lightPos}
-        intensity={1.5}
-        castShadow
-      />
+
+      {enabledLights.map((light) => (
+        <React.Fragment key={light.id}>
+          <directionalLight
+            position={light.position}
+            intensity={light.intensity}
+            color={light.color}
+            castShadow
+          />
+        </React.Fragment>
+      ))}
+
+      {/* Light markers */}
+      {enabledLights.map((light) => (
+        <DragControls
+          key={light.id}
+          onDrag={(_, __, worldMatrix) => {
+            const pos = new THREE.Vector3().setFromMatrixPosition(worldMatrix);
+            onLightUpdate(light.id, { position: [pos.x, pos.y, pos.z] });
+          }}
+        >
+          <mesh
+            position={light.position}
+            onClick={(e) => {
+              e.stopPropagation();
+              onLightSelect(light.id);
+            }}
+          >
+            <sphereGeometry args={[0.15, 16, 16]} />
+            <meshStandardMaterial
+              color={light.color}
+              emissive={light.id === selectedLightId ? light.color : '#000000'}
+              emissiveIntensity={light.id === selectedLightId ? 0.8 : 0}
+            />
+          </mesh>
+        </DragControls>
+      ))}
+
+      {/* Main model */}
       <mesh
         ref={meshRef}
         onClick={handleClick}
@@ -81,7 +131,25 @@ function Scene({
           metalness={metalness}
         />
       </mesh>
+
+      {/* Ground plane */}
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -1, 0]}
+        receiveShadow
+      >
+        <planeGeometry args={[20, 20]} />
+        <meshStandardMaterial
+          color="#444444"
+          roughness={0.8}
+          metalness={0.2}
+          opacity={0.6}
+          transparent
+        />
+      </mesh>
+
       <gridHelper args={[10, 10, '#4e5058', '#3c3f45']} />
+
       <OrbitControls
         enableDamping
         dampingFactor={0.1}
@@ -105,8 +173,11 @@ interface MaterialBallProps {
   color: string;
   roughness?: number;
   metalness?: number;
-  lightPosition?: [number, number, number];
+  lights: LightConfig[];
   geometry?: GeometryType;
+  selectedLightId?: string | null;
+  onLightSelect?: (id: string | null) => void;
+  onLightUpdate?: (id: string, updates: Partial<Omit<LightConfig, 'id'>>) => void;
   onColorSampled?: (r: number, g: number, b: number) => void;
 }
 
@@ -114,8 +185,11 @@ export default function MaterialBall({
   color,
   roughness = 0.5,
   metalness = 0.0,
-  lightPosition = [5, 5, 5],
+  lights,
   geometry = 'sphere',
+  selectedLightId = null,
+  onLightSelect,
+  onLightUpdate,
   onColorSampled,
 }: MaterialBallProps) {
   const styles: Record<string, React.CSSProperties> = {
@@ -139,8 +213,11 @@ export default function MaterialBall({
           color={color}
           roughness={roughness}
           metalness={metalness}
-          lightPos={lightPosition}
+          lights={lights}
           geometry={geometry}
+          selectedLightId={selectedLightId}
+          onLightSelect={onLightSelect ?? (() => {})}
+          onLightUpdate={onLightUpdate ?? (() => {})}
           onColorSampled={
             onColorSampled ?? (() => {})
           }

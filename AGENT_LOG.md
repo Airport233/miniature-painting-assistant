@@ -189,6 +189,24 @@
 
 ---
 
+## UI Redesign: 导航重构 + 3D增强
+
+### 2026-05-23 — UI Redesign Phase
+
+| 项目 | 详情 |
+|------|------|
+| **时间戳** | 2026-05-23 00:30 CST |
+| **分支** | `feature/ui-redesign` |
+| **变更文件** | 8 files (4 new, 4 modified) |
+| **新建文件** | Sidebar.tsx, Layout.tsx, PaintsPage.tsx, RecipesPage.tsx |
+| **修改文件** | App.tsx (routing refactor), WorkspacePage.tsx (原 DashboardPage.tsx, 2-column grid), MaterialBall.tsx (多光源 + 地面), LightingControls.tsx (多光源控制), AGENT_LOG.md |
+| **删除文件** | DashboardPage.tsx (重命名为 WorkspacePage.tsx) |
+| **Sidebar** | 固定 56px 折叠/220px 展开, Discord 暗色主题, 3 导航项 |
+| **3D 增强** | 多光源系统 (DirectionalLight + 可拖拽标记球), 半透明地面平面, XYZ 滑条 + 色温预设 |
+| **验证** | `npm run build` — TypeScript 零错误, Vite 零警告 |
+
+---
+
 ## 总体统计
 
 | 指标 | 数据 |
