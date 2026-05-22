@@ -326,12 +326,21 @@ export default function MaterialBall({
   const lightsRef = useRef(lights);
   lightsRef.current = lights;
   const cameraRef = useRef<THREE.Camera | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleWheel = useCallback(
-    (e: React.WheelEvent) => {
+  // Intercept wheel on canvas to prevent OrbitControls zoom when light selected
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const canvas = container.querySelector('canvas');
+    if (!canvas) return;
+
+    const onWheelCapture = (e: WheelEvent) => {
       if (!selectedLightId || !onLightUpdate || !cameraRef.current) return;
       const current = lightsRef.current.find((l) => l.id === selectedLightId);
       if (!current) return;
+      e.preventDefault();
+      e.stopPropagation();
       const forward = new THREE.Vector3();
       cameraRef.current.getWorldDirection(forward);
       forward.normalize();
@@ -343,12 +352,14 @@ export default function MaterialBall({
           current.position[2] + forward.z * step,
         ],
       });
-    },
-    [selectedLightId, onLightUpdate]
-  );
+    };
+
+    canvas.addEventListener('wheel', onWheelCapture, { capture: true });
+    return () => canvas.removeEventListener('wheel', onWheelCapture, { capture: true });
+  }, [selectedLightId, onLightUpdate, lightsRef]);
 
   return (
-    <div style={styles.container} onWheel={handleWheel}>
+    <div style={styles.container} ref={containerRef}>
       <Canvas
         camera={{ position: [0, 0, 4], fov: 45 }}
         gl={{ antialias: true }}
