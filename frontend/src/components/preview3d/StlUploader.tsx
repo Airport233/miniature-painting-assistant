@@ -26,8 +26,8 @@ export default function StlUploader({ onModelLoaded }: StlUploaderProps) {
 
     try {
       const result = await modelsApi.upload(file);
-      setModelUrl(result.url);
-      onModelLoaded(result.url, file.name);
+      setModelUrl(result.filePath);
+      onModelLoaded(result.filePath, file.name);
     } catch {
       setError('上传模型失败。');
     } finally {
@@ -99,15 +99,13 @@ export default function StlUploader({ onModelLoaded }: StlUploaderProps) {
     <div style={styles.container}>
       <h4 style={styles.heading}>STL模型</h4>
 
-      {!modelUrl && (
-        <input
-          type="file"
-          accept=".stl"
-          onChange={handleFileChange}
-          disabled={uploading}
-          style={styles.fileInput}
-        />
-      )}
+      <input
+        type="file"
+        accept=".stl"
+        onChange={handleFileChange}
+        disabled={uploading}
+        style={styles.fileInput}
+      />
 
       {uploading && <div style={styles.uploading}>上传中...</div>}
 
@@ -115,7 +113,7 @@ export default function StlUploader({ onModelLoaded }: StlUploaderProps) {
 
       {modelUrl && filename && (
         <div style={styles.statusRow}>
-          <span style={styles.filename}>{filename}</span>
+          <span style={styles.filename}>已加载: {filename}</span>
           <button onClick={handleDelete} style={styles.deleteBtn}>
             删除
           </button>

@@ -3,7 +3,7 @@ import client from './client';
 export interface ModelUploadResponse {
   id: number;
   filename: string;
-  url: string;
+  filePath: string;
 }
 
 export const upload = async (file: File): Promise<ModelUploadResponse> => {

@@ -6,6 +6,7 @@ interface GeometrySelectorProps {
   value: GeometryType;
   onChange: (value: GeometryType) => void;
   modelName?: string | null;
+  onSelectModel?: () => void;
 }
 
 const OPTIONS: { value: GeometryType; label: string }[] = [
@@ -18,6 +19,7 @@ export default function GeometrySelector({
   value,
   onChange,
   modelName,
+  onSelectModel,
 }: GeometrySelectorProps) {
   const isModelSelected = !!modelName;
 
@@ -95,10 +97,10 @@ export default function GeometrySelector({
               name="geometry"
               value="model"
               checked={isModelSelected}
-              onChange={() => {}}
+              onChange={() => onSelectModel?.()}
               style={styles.radio}
             />
-            {modelName}
+            STL: {modelName}
           </label>
         )}
       </div>

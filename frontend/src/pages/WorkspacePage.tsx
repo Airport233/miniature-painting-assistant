@@ -245,6 +245,7 @@ export default function WorkspacePage() {
                 value={geometry}
                 onChange={handleGeometryChange}
                 modelName={modelName}
+                onSelectModel={() => setModelUrl(modelUrl)}
               />
               <StlUploader onModelLoaded={handleModelLoaded} />
             </div>
