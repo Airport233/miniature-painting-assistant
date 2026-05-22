@@ -4,16 +4,8 @@ import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import EmailVerifiedPage from './pages/EmailVerifiedPage';
+import DashboardPage from './pages/DashboardPage';
 import ProtectedRoute from './components/ProtectedRoute';
-
-function DashboardPage() {
-  return (
-    <div style={{ padding: '24px', color: '#dbdee1' }}>
-      <h1>Miniature Painting Assistant</h1>
-      <p style={{ color: '#949ba0', marginTop: '8px' }}>Welcome! Use the navigation to manage paints, mix colors, and save recipes.</p>
-    </div>
-  );
-}
 
 export default function App() {
   return (
