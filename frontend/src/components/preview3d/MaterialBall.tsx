@@ -37,6 +37,7 @@ function Scene({
   onColorSampled,
 }: SceneProps) {
   const meshRef = useRef<THREE.Mesh>(null);
+  const [isDragging, setIsDragging] = React.useState(false);
 
   const getGeometry = () => {
     switch (geometry) {
@@ -95,6 +96,8 @@ function Scene({
       {enabledLights.map((light) => (
         <DragControls
           key={light.id}
+          onDragStart={() => setIsDragging(true)}
+          onDragEnd={() => setIsDragging(false)}
           onDrag={(_, __, worldMatrix) => {
             const pos = new THREE.Vector3().setFromMatrixPosition(worldMatrix);
             onLightUpdate(light.id, { position: [pos.x, pos.y, pos.z] });
@@ -151,6 +154,7 @@ function Scene({
       <gridHelper args={[10, 10, '#4e5058', '#3c3f45']} />
 
       <OrbitControls
+        enabled={!isDragging}
         enableDamping
         dampingFactor={0.1}
         minDistance={2}
