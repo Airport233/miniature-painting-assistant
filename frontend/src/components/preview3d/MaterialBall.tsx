@@ -1,6 +1,6 @@
-import React, { useRef, useCallback } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, DragControls } from '@react-three/drei';
+import React, { useRef, useCallback, useEffect } from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 
 type GeometryType = 'sphere' | 'cube' | 'cylinder';
@@ -23,6 +23,7 @@ interface SceneProps {
   onLightSelect: (id: string | null) => void;
   onLightUpdate: (id: string, updates: Partial<Omit<LightConfig, 'id'>>) => void;
   onColorSampled: (r: number, g: number, b: number) => void;
+  cameraRef: React.MutableRefObject<THREE.Camera | null>;
 }
 
 function Scene({
@@ -35,9 +36,15 @@ function Scene({
   onLightSelect,
   onLightUpdate,
   onColorSampled,
+  cameraRef,
 }: SceneProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const [isDragging, setIsDragging] = React.useState(false);
+  const { camera, gl } = useThree();
+
+  useEffect(() => {
+    cameraRef.current = camera;
+  }, [camera]);
 
   const getGeometry = () => {
     switch (geometry) {
@@ -75,49 +82,114 @@ function Scene({
     [color, geometry, onColorSampled]
   );
 
+  const dragRef = useRef<{ lightId: string; startPos: THREE.Vector3 } | null>(null);
+  const planeRef = useRef(new THREE.Plane());
+  const raycasterRef = useRef(new THREE.Raycaster());
+
   const enabledLights = lights.filter((l) => l.enabled);
+
+  // Custom drag using raycasting against camera-facing plane
+  useEffect(() => {
+    const canvas = gl.domElement;
+
+    const getMouseNDC = (e: MouseEvent): { x: number; y: number } => {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
+        y: -((e.clientY - rect.top) / rect.height) * 2 + 1,
+      };
+    };
+
+    const getIntersection = (mouse: { x: number; y: number }, point: THREE.Vector3): THREE.Vector3 | null => {
+      const normal = camera.getWorldDirection(new THREE.Vector3()).normalize();
+      planeRef.current.setFromNormalAndCoplanarPoint(normal, point);
+      raycasterRef.current.setFromCamera(new THREE.Vector2(mouse.x, mouse.y), camera);
+      return raycasterRef.current.ray.intersectPlane(planeRef.current, new THREE.Vector3());
+    };
+
+    const onMouseDown = (e: MouseEvent) => {
+      const mouse = getMouseNDC(e);
+      raycasterRef.current.setFromCamera(new THREE.Vector2(mouse.x, mouse.y), camera);
+
+      // Hit-test light markers
+      let closest: { id: string; point: THREE.Vector3 } | null = null;
+      let closestDist = Infinity;
+
+      for (const light of enabledLights) {
+        const lightPos = new THREE.Vector3(...light.position);
+        const sphere = new THREE.Sphere(lightPos, 0.25);
+        const hitPoint = new THREE.Vector3();
+        const hit = raycasterRef.current.ray.intersectSphere(sphere, hitPoint);
+        if (hit) {
+          const dist = hitPoint.distanceTo(raycasterRef.current.ray.origin);
+          if (dist < closestDist) {
+            closestDist = dist;
+            closest = { id: light.id, point: lightPos.clone() };
+          }
+        }
+      }
+
+      if (closest) {
+        const hit = closest;
+        e.stopPropagation();
+        onLightSelect(hit.id);
+        dragRef.current = { lightId: hit.id, startPos: hit.point };
+        setIsDragging(true);
+      }
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!dragRef.current) return;
+      const mouse = getMouseNDC(e);
+      const p = getIntersection(mouse, dragRef.current.startPos);
+      if (p) {
+        onLightUpdate(dragRef.current.lightId, { position: [p.x, p.y, p.z] });
+      }
+    };
+
+    const onMouseUp = () => {
+      dragRef.current = null;
+      setIsDragging(false);
+    };
+
+    canvas.addEventListener('pointerdown', onMouseDown);
+    window.addEventListener('pointermove', onMouseMove);
+    window.addEventListener('pointerup', onMouseUp);
+
+    return () => {
+      canvas.removeEventListener('pointerdown', onMouseDown);
+      window.removeEventListener('pointermove', onMouseMove);
+      window.removeEventListener('pointerup', onMouseUp);
+    };
+  }, [camera, gl, enabledLights, onLightSelect, onLightUpdate]);
 
   return (
     <>
       <ambientLight intensity={0.3} />
 
       {enabledLights.map((light) => (
-        <React.Fragment key={light.id}>
-          <directionalLight
-            position={light.position}
-            intensity={light.intensity}
-            color={light.color}
-            castShadow
-          />
-        </React.Fragment>
+        <directionalLight
+          key={light.id}
+          position={light.position}
+          intensity={light.intensity}
+          color={light.color}
+          castShadow
+        />
       ))}
 
       {/* Light markers */}
       {enabledLights.map((light) => (
-        <DragControls
-          key={light.id}
-          onDragStart={() => setIsDragging(true)}
-          onDragEnd={() => setIsDragging(false)}
-          onDrag={(_, __, worldMatrix) => {
-            const pos = new THREE.Vector3().setFromMatrixPosition(worldMatrix);
-            onLightUpdate(light.id, { position: [pos.x, pos.y, pos.z] });
-          }}
+        <mesh
+          key={`marker-${light.id}`}
+          position={light.position}
         >
-          <mesh
-            position={light.position}
-            onClick={(e) => {
-              e.stopPropagation();
-              onLightSelect(light.id);
-            }}
-          >
-            <sphereGeometry args={[0.15, 16, 16]} />
-            <meshStandardMaterial
-              color={light.color}
-              emissive={light.id === selectedLightId ? light.color : '#000000'}
-              emissiveIntensity={light.id === selectedLightId ? 0.8 : 0}
-            />
-          </mesh>
-        </DragControls>
+          <sphereGeometry args={[0.1, 16, 16]} />
+          <meshStandardMaterial
+            color={light.color}
+            emissive={light.id === selectedLightId ? light.color : '#000000'}
+            emissiveIntensity={light.id === selectedLightId ? 0.8 : 0}
+          />
+        </mesh>
       ))}
 
       {/* Main model */}
@@ -210,15 +282,23 @@ export default function MaterialBall({
 
   const lightsRef = useRef(lights);
   lightsRef.current = lights;
+  const cameraRef = useRef<THREE.Camera | null>(null);
 
   const handleWheel = useCallback(
     (e: React.WheelEvent) => {
-      if (!selectedLightId || !onLightUpdate) return;
+      if (!selectedLightId || !onLightUpdate || !cameraRef.current) return;
       const current = lightsRef.current.find((l) => l.id === selectedLightId);
       if (!current) return;
-      const delta = e.deltaY > 0 ? -0.3 : 0.3;
+      const forward = new THREE.Vector3();
+      cameraRef.current.getWorldDirection(forward);
+      forward.normalize();
+      const step = e.deltaY > 0 ? -0.3 : 0.3;
       onLightUpdate(selectedLightId, {
-        position: [current.position[0], current.position[1], current.position[2] + delta],
+        position: [
+          current.position[0] + forward.x * step,
+          current.position[1] + forward.y * step,
+          current.position[2] + forward.z * step,
+        ],
       });
     },
     [selectedLightId, onLightUpdate]
@@ -242,6 +322,7 @@ export default function MaterialBall({
           onColorSampled={
             onColorSampled ?? (() => {})
           }
+          cameraRef={cameraRef}
         />
       </Canvas>
     </div>
