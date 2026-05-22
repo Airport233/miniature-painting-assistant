@@ -207,19 +207,17 @@ function Scene({
         />
       </mesh>
 
-      {/* Ground plane */}
+      {/* Ground plane — desk/display surface for ambient light reflection */}
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, -1, 0]}
+        position={[0, -1.3, 0]}
         receiveShadow
       >
-        <planeGeometry args={[20, 20]} />
+        <planeGeometry args={[12, 12]} />
         <meshStandardMaterial
-          color="#444444"
-          roughness={0.8}
-          metalness={0.2}
-          opacity={0.6}
-          transparent
+          color="#888888"
+          roughness={0.4}
+          metalness={0.1}
         />
       </mesh>
 
