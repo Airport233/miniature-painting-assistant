@@ -1525,6 +1525,8 @@ git commit -m "feat: implement auth service with register, login, email verify, 
 
 ### Task 2.1: Paint entity + CRUD backend
 
+> **Status:** DONE — commit `482f8fc` (subagent, TDD: 3/3 tests, 7 files)
+
 **Files:** Create `backend/src/main/java/com/minipaint/model/Paint.java`, `backend/src/main/java/com/minipaint/repository/PaintRepository.java`, `backend/src/main/java/com/minipaint/dto/PaintRequest.java`, `backend/src/main/java/com/minipaint/dto/PaintResponse.java`, `backend/src/main/java/com/minipaint/service/PaintService.java`, `backend/src/main/java/com/minipaint/controller/PaintController.java`; Create test: `backend/src/test/java/com/minipaint/service/PaintServiceTest.java`
 
 - [ ] **Step 1: Write failing test**
@@ -1806,6 +1808,8 @@ git commit -m "feat: add paint CRUD with brand/color/RGB fields"
 ---
 
 ### Task 2.2: Paint photo upload + color extraction endpoint
+
+> **Status:** DONE — commit `ecd7af2` (subagent, TDD: 4/4 tests, WebConfig + PaintService.uploadPhoto)
 
 **Files:** Modify `backend/src/main/java/com/minipaint/service/PaintService.java`; Create `backend/src/main/java/com/minipaint/config/WebConfig.java`
 
