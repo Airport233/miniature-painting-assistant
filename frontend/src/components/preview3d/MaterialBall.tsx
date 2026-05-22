@@ -275,7 +275,7 @@ function StlModel({
       -center.y * scale + (heightOffset ?? 0),
       -center.z * scale
     );
-  }, [geometry]);
+  }, [geometry, heightOffset]);
 
   return (
     <mesh
