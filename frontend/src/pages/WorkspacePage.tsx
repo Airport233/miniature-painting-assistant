@@ -39,6 +39,8 @@ export default function WorkspacePage() {
   const [selectedLightId, setSelectedLightId] = useState<string | null>(lights[0]?.id ?? null);
   const [hasMixColor, setHasMixColor] = useState(false);
   const [showColorWheel, setShowColorWheel] = useState(false);
+  const [modelUrl, setModelUrl] = useState<string | null>(null);
+  const [modelName, setModelName] = useState<string | null>(null);
 
   const handleMixResult = useCallback((result: MixResponse) => {
     setMixResult(result);
@@ -61,8 +63,21 @@ export default function WorkspacePage() {
     // Re-apply the current mix color to ensure it stays active
   }, []);
 
-  const handleModelLoaded = useCallback((_url: string) => {
-    // Model URL stored for future use
+  const handleModelLoaded = useCallback((url: string, filename: string) => {
+    if (!url) {
+      setModelUrl(null);
+      setModelName(null);
+      return;
+    }
+    setModelUrl(url);
+    const name = filename.replace(/\.stl$/i, '');
+    setModelName(name);
+  }, []);
+
+  const handleGeometryChange = useCallback((value: GeometryType) => {
+    setGeometry(value);
+    setModelUrl(null);
+    setModelName(null);
   }, []);
 
   const handleUpdateLight = useCallback(
@@ -204,6 +219,7 @@ export default function WorkspacePage() {
             onLightSelect={setSelectedLightId}
             onLightUpdate={handleUpdateLight}
             onColorSampled={handleColorSampled}
+            modelUrl={modelUrl}
           />
           <div style={styles.controlsPanel}>
             <LightingControls
@@ -225,7 +241,11 @@ export default function WorkspacePage() {
               hasMixColor={hasMixColor}
             />
             <div>
-              <GeometrySelector value={geometry} onChange={setGeometry} />
+              <GeometrySelector
+                value={geometry}
+                onChange={handleGeometryChange}
+                modelName={modelName}
+              />
               <StlUploader onModelLoaded={handleModelLoaded} />
             </div>
           </div>

@@ -1,6 +1,7 @@
 import React, { useRef, useCallback, useEffect } from 'react';
-import { Canvas, useThree } from '@react-three/fiber';
+import { Canvas, useThree, useLoader } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
+import { STLLoader } from 'three-stdlib';
 import * as THREE from 'three';
 
 type GeometryType = 'sphere' | 'cube' | 'cylinder';
@@ -19,6 +20,7 @@ interface SceneProps {
   metalness: number;
   lights: LightConfig[];
   geometry: GeometryType;
+  modelUrl?: string | null;
   selectedLightId: string | null;
   onLightSelect: (id: string | null) => void;
   onLightUpdate: (id: string, updates: Partial<Omit<LightConfig, 'id'>>) => void;
@@ -32,6 +34,7 @@ function Scene({
   metalness,
   lights,
   geometry,
+  modelUrl,
   selectedLightId,
   onLightSelect,
   onLightUpdate,
@@ -197,19 +200,28 @@ function Scene({
       ))}
 
       {/* Main model */}
-      <mesh
-        ref={meshRef}
-        onClick={handleClick}
-        castShadow
-        receiveShadow
-      >
-        {getGeometry()}
-        <meshStandardMaterial
+      {modelUrl ? (
+        <StlModel
+          url={modelUrl}
           color={color}
           roughness={roughness}
           metalness={metalness}
         />
-      </mesh>
+      ) : (
+        <mesh
+          ref={meshRef}
+          onClick={handleClick}
+          castShadow
+          receiveShadow
+        >
+          {getGeometry()}
+          <meshStandardMaterial
+            color={color}
+            roughness={roughness}
+            metalness={metalness}
+          />
+        </mesh>
+      )}
 
       {/* Ground plane — model sits on this surface, receives light + reflects back */}
       <mesh
@@ -238,6 +250,51 @@ function Scene({
   );
 }
 
+function StlModel({
+  url,
+  color,
+  roughness,
+  metalness,
+}: {
+  url: string;
+  color: string;
+  roughness: number;
+  metalness: number;
+}) {
+  const geometry = useLoader(STLLoader, url);
+  const meshRef = useRef<THREE.Mesh>(null);
+
+  useEffect(() => {
+    if (!meshRef.current) return;
+
+    geometry.computeBoundingBox();
+    const box = geometry.boundingBox;
+    if (!box) return;
+
+    const size = box.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scale = 2.0 / maxDim;
+    meshRef.current.scale.setScalar(scale);
+
+    const center = box.getCenter(new THREE.Vector3());
+    meshRef.current.position.set(
+      -center.x * scale,
+      -center.y * scale,
+      -center.z * scale
+    );
+  }, [geometry]);
+
+  return (
+    <mesh ref={meshRef} geometry={geometry} castShadow receiveShadow>
+      <meshStandardMaterial
+        color={color}
+        roughness={roughness}
+        metalness={metalness}
+      />
+    </mesh>
+  );
+}
+
 function getUvFromLocalPoint(
   point: THREE.Vector3,
 ): { u: number; v: number } | null {
@@ -253,6 +310,7 @@ interface MaterialBallProps {
   metalness?: number;
   lights: LightConfig[];
   geometry?: GeometryType;
+  modelUrl?: string | null;
   selectedLightId?: string | null;
   onLightSelect?: (id: string | null) => void;
   onLightUpdate?: (id: string, updates: Partial<Omit<LightConfig, 'id'>>) => void;
@@ -265,6 +323,7 @@ export default function MaterialBall({
   metalness = 0.0,
   lights,
   geometry = 'sphere',
+  modelUrl,
   selectedLightId = null,
   onLightSelect,
   onLightUpdate,
@@ -318,6 +377,7 @@ export default function MaterialBall({
           metalness={metalness}
           lights={lights}
           geometry={geometry}
+          modelUrl={modelUrl}
           selectedLightId={selectedLightId}
           onLightSelect={onLightSelect ?? (() => {})}
           onLightUpdate={onLightUpdate ?? (() => {})}

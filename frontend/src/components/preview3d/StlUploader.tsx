@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as modelsApi from '../../api/models';
 
 interface StlUploaderProps {
-  onModelLoaded: (url: string) => void;
+  onModelLoaded: (url: string, filename: string) => void;
 }
 
 export default function StlUploader({ onModelLoaded }: StlUploaderProps) {
@@ -27,7 +27,7 @@ export default function StlUploader({ onModelLoaded }: StlUploaderProps) {
     try {
       const result = await modelsApi.upload(file);
       setModelUrl(result.url);
-      onModelLoaded(result.url);
+      onModelLoaded(result.url, file.name);
     } catch {
       setError('上传模型失败。');
     } finally {
@@ -39,6 +39,7 @@ export default function StlUploader({ onModelLoaded }: StlUploaderProps) {
     setFilename(null);
     setModelUrl(null);
     setError(null);
+    onModelLoaded('', '');
   };
 
   const styles: Record<string, React.CSSProperties> = {
