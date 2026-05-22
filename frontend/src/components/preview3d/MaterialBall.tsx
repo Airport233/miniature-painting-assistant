@@ -22,6 +22,7 @@ interface SceneProps {
   geometry: GeometryType;
   modelUrl?: string | null;
   modelRotation?: [number, number, number];
+  modelHeight?: number;
   selectedLightId: string | null;
   onLightSelect: (id: string | null) => void;
   onLightUpdate: (id: string, updates: Partial<Omit<LightConfig, 'id'>>) => void;
@@ -37,6 +38,7 @@ function Scene({
   geometry,
   modelUrl,
   modelRotation,
+  modelHeight,
   selectedLightId,
   onLightSelect,
   onLightUpdate,
@@ -207,6 +209,7 @@ function Scene({
           roughness={roughness}
           metalness={metalness}
           rotationDeg={modelRotation}
+          heightOffset={modelHeight}
         />
       ) : (
         <mesh
@@ -242,12 +245,14 @@ function StlModel({
   roughness,
   metalness,
   rotationDeg,
+  heightOffset,
 }: {
   url: string;
   color: string;
   roughness: number;
   metalness: number;
   rotationDeg?: [number, number, number];
+  heightOffset?: number;
 }) {
   const geometry = useLoader(STLLoader, url);
   const meshRef = useRef<THREE.Mesh>(null);
@@ -267,7 +272,7 @@ function StlModel({
     const center = box.getCenter(new THREE.Vector3());
     meshRef.current.position.set(
       -center.x * scale,
-      -center.y * scale,
+      -center.y * scale + (heightOffset ?? 0),
       -center.z * scale
     );
   }, [geometry]);
@@ -306,6 +311,7 @@ interface MaterialBallProps {
   geometry?: GeometryType;
   modelUrl?: string | null;
   modelRotation?: [number, number, number];
+  modelHeight?: number;
   selectedLightId?: string | null;
   onLightSelect?: (id: string | null) => void;
   onLightUpdate?: (id: string, updates: Partial<Omit<LightConfig, 'id'>>) => void;
@@ -320,6 +326,7 @@ export default function MaterialBall({
   geometry = 'sphere',
   modelUrl,
   modelRotation,
+  modelHeight = 0,
   selectedLightId = null,
   onLightSelect,
   onLightUpdate,
@@ -386,6 +393,7 @@ export default function MaterialBall({
           geometry={geometry}
           modelUrl={modelUrl}
           modelRotation={modelRotation}
+          modelHeight={modelHeight}
           selectedLightId={selectedLightId}
           onLightSelect={onLightSelect ?? (() => {})}
           onLightUpdate={onLightUpdate ?? (() => {})}

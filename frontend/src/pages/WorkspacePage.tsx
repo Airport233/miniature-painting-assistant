@@ -42,6 +42,7 @@ export default function WorkspacePage() {
   const [modelUrl, setModelUrl] = useState<string | null>(null);
   const [modelName, setModelName] = useState<string | null>(null);
   const [modelRotation, setModelRotation] = useState<[number, number, number]>([0, 0, 0]);
+  const [modelHeight, setModelHeight] = useState(0);
 
   const handleMixResult = useCallback((result: MixResponse) => {
     setMixResult(result);
@@ -222,6 +223,7 @@ export default function WorkspacePage() {
             onColorSampled={handleColorSampled}
             modelUrl={modelUrl}
             modelRotation={modelRotation}
+            modelHeight={modelHeight}
           />
           <div style={styles.controlsPanel}>
             <LightingControls
@@ -255,29 +257,41 @@ export default function WorkspacePage() {
                   backgroundColor: '#2b2d31', borderRadius: '8px', padding: '16px', marginTop: '12px',
                 }}>
                   <h4 style={{ color: '#dbdee1', fontSize: '14px', fontWeight: 700, margin: '0 0 10px 0' }}>模型旋转</h4>
-                  {['X', 'Y', 'Z'].map((axis, i) => (
-                    <div key={axis} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                      <span style={{ color: '#b5bac1', fontSize: '12px', width: '16px' }}>{axis}</span>
+                  {[
+                    { axis: 'X轴旋转', key: 'rx', min: -180, max: 180, unit: '°' },
+                    { axis: 'Y轴旋转', key: 'ry', min: -180, max: 180, unit: '°' },
+                    { axis: 'Z轴旋转', key: 'rz', min: -180, max: 180, unit: '°' },
+                    { axis: '高度', key: 'h', min: -3, max: 3, unit: '' },
+                  ].map((item, i) => (
+                    <div key={item.key} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                      <span style={{ color: '#b5bac1', fontSize: '12px', width: '54px' }}>{item.axis}</span>
                       <input
-                        type="range" min={-180} max={180} value={modelRotation[i]}
+                        type="range" min={item.min} max={item.max} step={i === 3 ? 0.01 : 1}
+                        value={i < 3 ? modelRotation[i] : modelHeight}
                         onChange={(e) => {
-                          const v = [...modelRotation] as [number, number, number];
-                          v[i] = Number(e.target.value);
-                          setModelRotation(v);
+                          if (i < 3) {
+                            const v = [...modelRotation] as [number, number, number];
+                            v[i] = Number(e.target.value);
+                            setModelRotation(v);
+                          } else {
+                            setModelHeight(Number(e.target.value));
+                          }
                         }}
                         style={{ flex: 1, accentColor: '#5865f2' }}
                       />
-                      <span style={{ color: '#dbdee1', fontSize: '12px', width: '36px', textAlign: 'right' }}>{modelRotation[i]}°</span>
+                      <span style={{ color: '#dbdee1', fontSize: '12px', width: '40px', textAlign: 'right' }}>
+                        {i < 3 ? `${modelRotation[i]}°` : modelHeight.toFixed(2)}
+                      </span>
                     </div>
                   ))}
                   <button
-                    onClick={() => setModelRotation([0, 0, 0])}
+                    onClick={() => { setModelRotation([0, 0, 0]); setModelHeight(0); }}
                     style={{
                       marginTop: '6px', padding: '4px 10px', backgroundColor: '#4e5058',
                       border: 'none', borderRadius: '4px', color: '#dbdee1', fontSize: '11px', cursor: 'pointer',
                     }}
                   >
-                    重置旋转
+                    全部重置
                   </button>
                 </div>
               )}
