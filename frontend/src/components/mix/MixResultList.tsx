@@ -74,8 +74,8 @@ export default function MixResultList({
   if (loading) {
     return (
       <div style={styles.container}>
-        <h3 style={styles.heading}>Mix Results</h3>
-        <div style={styles.loadingText}>Computing mixes...</div>
+        <h3 style={styles.heading}>混色结果</h3>
+        <div style={styles.loadingText}>正在计算混色...</div>
       </div>
     );
   }
@@ -83,7 +83,7 @@ export default function MixResultList({
   if (error) {
     return (
       <div style={styles.container}>
-        <h3 style={styles.heading}>Mix Results</h3>
+        <h3 style={styles.heading}>混色结果</h3>
         <div style={styles.errorText}>{error}</div>
       </div>
     );
@@ -92,9 +92,9 @@ export default function MixResultList({
   if (!mixResult) {
     return (
       <div style={styles.container}>
-        <h3 style={styles.heading}>Mix Results</h3>
+        <h3 style={styles.heading}>混色结果</h3>
         <div style={styles.emptyText}>
-          Select a target color and click "Compute Mix"
+          选择目标色并点击"计算混色"
         </div>
       </div>
     );

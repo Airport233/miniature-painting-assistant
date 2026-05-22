@@ -140,8 +140,8 @@ export default function DashboardPage() {
     <div style={styles.pageContainer}>
       <div style={styles.header}>
         <div>
-          <h1 style={styles.heading}>Dashboard</h1>
-          <p style={styles.subtitle}>Mix paints and preview in 3D</p>
+          <h1 style={styles.heading}>工作台</h1>
+          <p style={styles.subtitle}>混色与3D预览</p>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
           <button
@@ -151,13 +151,13 @@ export default function DashboardPage() {
               backgroundColor: showColorWheel ? '#5865f2' : '#4e5058',
             }}
           >
-            {showColorWheel ? 'Hide Color Wheel' : 'Color Wheel'}
+            {showColorWheel ? '隐藏色轮' : '色轮'}
           </button>
           <button
             onClick={() => setShowPaintList(!showPaintList)}
             style={styles.togglePaintBtn}
           >
-            {showPaintList ? 'Hide Paint List' : 'Show Paint List'}
+            {showPaintList ? '隐藏漆料列表' : '显示漆料列表'}
           </button>
         </div>
       </div>
@@ -176,7 +176,7 @@ export default function DashboardPage() {
                 ...(leftTab === 'paints' ? { color: '#dbdee1', borderBottomColor: '#5865f2' } : {}),
               }}
             >
-              Paints
+              漆料
             </button>
             <button
               onClick={() => setLeftTab('recipes')}
@@ -185,7 +185,7 @@ export default function DashboardPage() {
                 ...(leftTab === 'recipes' ? { color: '#dbdee1', borderBottomColor: '#5865f2' } : {}),
               }}
             >
-              Recipes
+              配方
             </button>
           </div>
           <div style={styles.tabContent}>

@@ -58,11 +58,11 @@ export default function RecipeList() {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h3 style={styles.heading}>Recipes</h3>
+        <h3 style={styles.heading}>配方</h3>
       </div>
 
       {loading && recipes.length === 0 && (
-        <div style={styles.loadingText}>Loading recipes...</div>
+        <div style={styles.loadingText}>正在加载配方...</div>
       )}
 
       {error && (
@@ -70,7 +70,7 @@ export default function RecipeList() {
       )}
 
       {!loading && !error && recipes.length === 0 && (
-        <div style={styles.emptyText}>No recipes saved yet.</div>
+        <div style={styles.emptyText}>暂无保存的配方。</div>
       )}
 
       {recipes.length > 0 && (

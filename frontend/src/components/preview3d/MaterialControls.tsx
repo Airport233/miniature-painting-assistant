@@ -93,10 +93,10 @@ export default function MaterialControls({
 
   return (
     <div style={styles.container}>
-      <h4 style={styles.heading}>Material</h4>
+      <h4 style={styles.heading}>材质</h4>
 
       <div style={styles.row}>
-        <span style={styles.label}>Color</span>
+        <span style={styles.label}>颜色</span>
         <input
           type="color"
           value={color}
@@ -107,7 +107,7 @@ export default function MaterialControls({
       </div>
 
       <div style={styles.row}>
-        <span style={styles.label}>Roughness</span>
+        <span style={styles.label}>粗糙度</span>
         <input
           type="range"
           min={0}
@@ -120,12 +120,12 @@ export default function MaterialControls({
         <span style={styles.sliderValue}>{roughness.toFixed(2)}</span>
       </div>
       <div style={styles.roughnessLabel}>
-        <span>Gloss</span>
-        <span>Matte</span>
+        <span>光泽</span>
+        <span>消光</span>
       </div>
 
       <div style={styles.row}>
-        <span style={styles.label}>Metalness</span>
+        <span style={styles.label}>金属度</span>
         <input
           type="range"
           min={0}
@@ -138,8 +138,8 @@ export default function MaterialControls({
         <span style={styles.sliderValue}>{metalness.toFixed(2)}</span>
       </div>
       <div style={styles.roughnessLabel}>
-        <span>Non-metal</span>
-        <span>Metal</span>
+        <span>非金属</span>
+        <span>金属</span>
       </div>
 
       <button
@@ -150,7 +150,7 @@ export default function MaterialControls({
           ...(!hasMixColor ? styles.applyBtnDisabled : {}),
         }}
       >
-        Apply from Mix Result
+        应用混色结果
       </button>
     </div>
   );

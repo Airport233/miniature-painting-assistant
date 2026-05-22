@@ -31,7 +31,7 @@ export default function MixResultCard({
       });
       setSaved(true);
     } catch {
-      setSaveError('Failed to save recipe.');
+      setSaveError('保存配方失败。');
     } finally {
       setSaving(false);
     }
@@ -146,7 +146,7 @@ export default function MixResultCard({
         />
         <div style={styles.info}>
           <div style={styles.deltaE}>{candidate.deltaE.toFixed(2)}</div>
-          <div style={styles.deltaLabel}>Delta E</div>
+          <div style={styles.deltaLabel}>色差值</div>
         </div>
       </div>
 
@@ -170,10 +170,10 @@ export default function MixResultCard({
           onClick={() => onPreview3d(candidate.previewHex)}
           style={{ ...styles.btn, ...styles.previewBtn }}
         >
-          Preview in 3D
+          3D预览
         </button>
         {saved ? (
-          <span style={styles.savedText}>Saved!</span>
+          <span style={styles.savedText}>已保存！</span>
         ) : (
           <button
             onClick={handleSaveRecipe}
@@ -184,7 +184,7 @@ export default function MixResultCard({
               ...(saving ? styles.saveBtnDisabled : {}),
             }}
           >
-            {saving ? 'Saving...' : 'Save as Recipe'}
+            {saving ? '保存中...' : '保存为配方'}
           </button>
         )}
       </div>

@@ -43,15 +43,15 @@ export default function PaintForm({ paint, onClose }: PaintFormProps) {
     setFormError('');
 
     if (!colorName.trim()) {
-      setFormError('Color name is required');
+      setFormError('请填写颜色名称');
       return;
     }
     if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
-      setFormError('RGB values must be between 0 and 255');
+      setFormError('RGB值必须在0到255之间');
       return;
     }
     if (brand === 'Other' && !brandOther.trim()) {
-      setFormError('Please specify the custom brand name');
+      setFormError('请填写自定义品牌名称');
       return;
     }
 
@@ -255,13 +255,13 @@ export default function PaintForm({ paint, onClose }: PaintFormProps) {
     <div style={styles.overlay} onClick={onClose}>
       <div style={styles.card} onClick={(e) => e.stopPropagation()}>
         <h2 style={styles.title}>
-          {isEditing ? 'Edit Paint' : 'Add Paint'}
+          {isEditing ? '编辑漆料' : '添加漆料'}
         </h2>
 
         {formError && <div style={styles.error}>{formError}</div>}
 
         <form onSubmit={handleSubmit}>
-          <label style={styles.label}>Brand</label>
+          <label style={styles.label}>品牌</label>
           <select
             value={brand}
             onChange={(e) => setBrand(e.target.value)}
@@ -276,39 +276,39 @@ export default function PaintForm({ paint, onClose }: PaintFormProps) {
 
           {brand === 'Other' && (
             <>
-              <label style={styles.label}>Custom Brand Name</label>
+              <label style={styles.label}>自定义品牌名称</label>
               <input
                 type="text"
                 value={brandOther}
                 onChange={(e) => setBrandOther(e.target.value)}
-                placeholder="Enter brand name"
+                placeholder="输入品牌名称"
                 style={styles.input}
               />
             </>
           )}
 
-          <label style={styles.label}>Color Name</label>
+          <label style={styles.label}>颜色名称</label>
           <input
             type="text"
             value={colorName}
             onChange={(e) => setColorName(e.target.value)}
-            placeholder="e.g. Abaddon Black"
+            placeholder="例如 阿巴顿黑"
             style={styles.input}
             required
           />
 
-          <label style={styles.label}>Color Code (optional)</label>
+          <label style={styles.label}>色号（选填）</label>
           <input
             type="text"
             value={colorCode}
             onChange={(e) => setColorCode(e.target.value)}
-            placeholder="e.g. AB001"
+            placeholder="例如 AB001"
             style={styles.input}
           />
 
           <div style={styles.previewRow}>
             <div style={{ flex: 1 }}>
-              <label style={styles.label}>RGB Values</label>
+              <label style={styles.label}>RGB值</label>
               <div style={styles.numberRow}>
                 <div style={styles.numberField}>
                   <input
@@ -349,15 +349,15 @@ export default function PaintForm({ paint, onClose }: PaintFormProps) {
           </div>
 
           <div style={styles.photoPickerSection}>
-            <span style={styles.photoPickerLabel}>Pick Color from Photo</span>
+            <span style={styles.photoPickerLabel}>从照片取色</span>
             <PhotoColorPicker onColorPicked={handleColorPicked} />
           </div>
 
-          <label style={styles.label}>Notes (optional)</label>
+          <label style={styles.label}>备注（选填）</label>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            placeholder="Any additional notes about this paint..."
+            placeholder="关于这瓶漆料的备注..."
             style={styles.textarea}
           />
 
@@ -367,14 +367,14 @@ export default function PaintForm({ paint, onClose }: PaintFormProps) {
               onClick={onClose}
               style={styles.cancelButton}
             >
-              Cancel
+              取消
             </button>
             <button
               type="submit"
               disabled={submitting}
               style={styles.primaryButton}
             >
-              {submitting ? 'Saving...' : isEditing ? 'Update' : 'Create'}
+              {submitting ? '保存中...' : isEditing ? '更新' : '创建'}
             </button>
           </div>
         </form>

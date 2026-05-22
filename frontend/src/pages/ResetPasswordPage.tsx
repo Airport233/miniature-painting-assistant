@@ -87,12 +87,12 @@ export default function ResetPasswordPage() {
     setError('');
 
     if (newPassword !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError('密码不匹配。');
       return;
     }
 
     if (!token) {
-      setError('Invalid or missing reset token.');
+      setError('重置令牌无效或缺失。');
       return;
     }
 
@@ -100,7 +100,7 @@ export default function ResetPasswordPage() {
       await resetPassword(token, newPassword);
       setSuccess(true);
     } catch {
-      setError('Failed to reset password. The link may have expired.');
+      setError('重置密码失败，链接可能已过期。');
     }
   };
 
@@ -108,12 +108,12 @@ export default function ResetPasswordPage() {
     return (
       <div style={styles.container}>
         <div style={styles.card}>
-          <h1 style={styles.title}>Password Reset</h1>
+          <h1 style={styles.title}>密码已重置</h1>
           <p style={styles.message}>
-            Your password has been successfully reset.
+            密码已成功重置。
           </p>
           <Link to="/login" style={styles.link}>
-            Back to Sign In
+            返回登录
           </Link>
         </div>
       </div>
@@ -123,9 +123,9 @@ export default function ResetPasswordPage() {
   return (
     <div style={styles.container}>
       <form style={styles.card} onSubmit={handleSubmit}>
-        <h1 style={styles.title}>Reset Password</h1>
+        <h1 style={styles.title}>重置密码</h1>
         {error && <div style={{ ...styles.message, color: '#da373c' }}>{error}</div>}
-        <label style={styles.label}>New Password</label>
+        <label style={styles.label}>新密码</label>
         <input
           style={styles.input}
           type="password"
@@ -133,7 +133,7 @@ export default function ResetPasswordPage() {
           onChange={(e) => setNewPassword(e.target.value)}
           required
         />
-        <label style={styles.label}>Confirm Password</label>
+        <label style={styles.label}>确认密码</label>
         <input
           style={styles.input}
           type="password"
@@ -142,10 +142,10 @@ export default function ResetPasswordPage() {
           required
         />
         <button style={styles.button} type="submit">
-          Reset Password
+          重置密码
         </button>
         <Link to="/login" style={styles.link}>
-          Back to Sign In
+          返回登录
         </Link>
       </form>
     </div>

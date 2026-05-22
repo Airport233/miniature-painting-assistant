@@ -185,15 +185,15 @@ export default function RecipeCard({ recipe, onDelete }: RecipeCardProps) {
         {confirming ? (
           <div style={styles.confirmGroup}>
             <button onClick={handleDeleteClick} style={styles.confirmBtn}>
-              Confirm
+              确认
             </button>
             <button onClick={handleCancel} style={styles.cancelBtn}>
-              Cancel
+              取消
             </button>
           </div>
         ) : (
           <button onClick={handleDeleteClick} style={styles.deleteBtn}>
-            Delete
+            删除
           </button>
         )}
       </div>
@@ -207,14 +207,14 @@ export default function RecipeCard({ recipe, onDelete }: RecipeCardProps) {
       {targetHex && (
         <div style={styles.targetRow}>
           <div style={{ ...styles.swatch, backgroundColor: targetHex }} />
-          <span style={styles.targetLabel}>Target: {targetHex.toUpperCase()}</span>
+          <span style={styles.targetLabel}>目标色: {targetHex.toUpperCase()}</span>
         </div>
       )}
 
       {/* Components */}
       {recipe.components.length > 0 && (
         <>
-          <div style={styles.componentsHeading}>Components</div>
+          <div style={styles.componentsHeading}>组成</div>
           <div style={styles.componentList}>
             {recipe.components.map((comp, idx) => (
               <div key={idx} style={styles.componentRow}>
@@ -233,7 +233,7 @@ export default function RecipeCard({ recipe, onDelete }: RecipeCardProps) {
 
       {/* Footer */}
       <div style={styles.footer}>
-        <span style={styles.dateText}>Created {formatDate(recipe.createdAt)}</span>
+        <span style={styles.dateText}>创建于 {formatDate(recipe.createdAt)}</span>
       </div>
     </div>
   );

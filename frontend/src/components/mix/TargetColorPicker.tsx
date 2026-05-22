@@ -128,7 +128,7 @@ export default function TargetColorPicker({
       });
       onMixResult(result);
     } catch {
-      setError('Failed to compute mix. Please try again.');
+      setError('计算混色失败，请重试。');
     } finally {
       setComputing(false);
     }
@@ -245,12 +245,12 @@ export default function TargetColorPicker({
 
   return (
     <div style={styles.container}>
-      <h3 style={styles.heading}>Target Color</h3>
+      <h3 style={styles.heading}>目标色</h3>
 
       <div style={styles.previewBox} />
 
       <div style={styles.section}>
-        <span style={styles.sectionLabel}>Pick from Image</span>
+        <span style={styles.sectionLabel}>从图片取色</span>
         <input
           type="file"
           accept=".jpg,.jpeg,.png"
@@ -263,12 +263,12 @@ export default function TargetColorPicker({
           style={styles.canvas}
         />
         {imageLoaded && (
-          <p style={styles.instruction}>Click on the image to pick a color</p>
+          <p style={styles.instruction}>点击图片取色</p>
         )}
       </div>
 
       <div style={styles.section}>
-        <span style={styles.sectionLabel}>HEX</span>
+        <span style={styles.sectionLabel}>十六进制</span>
         <input
           type="text"
           value={hexInput}
@@ -279,7 +279,7 @@ export default function TargetColorPicker({
       </div>
 
       <div style={styles.section}>
-        <span style={styles.sectionLabel}>RGB</span>
+        <span style={styles.sectionLabel}>RGB值</span>
         <div style={styles.rgbRow}>
           <input
             type="number"
@@ -309,7 +309,7 @@ export default function TargetColorPicker({
             style={styles.rgbInput}
           />
           <button onClick={handleRgbInput} style={styles.applyBtn}>
-            Apply
+            应用
           </button>
         </div>
       </div>
@@ -322,7 +322,7 @@ export default function TargetColorPicker({
           ...(computing ? styles.mixButtonDisabled : {}),
         }}
       >
-        {computing ? 'Computing...' : 'Compute Mix'}
+        {computing ? '计算中...' : '计算混色'}
       </button>
 
       {error && <div style={styles.error}>{error}</div>}

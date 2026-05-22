@@ -86,7 +86,7 @@ export default function ForgotPasswordPage() {
       await forgotPassword(email);
       setSent(true);
     } catch {
-      setError('Failed to send reset email. Please try again.');
+      setError('发送重置邮件失败，请重试。');
     }
   };
 
@@ -94,13 +94,12 @@ export default function ForgotPasswordPage() {
     return (
       <div style={styles.container}>
         <div style={styles.card}>
-          <h1 style={styles.title}>Check Your Email</h1>
+          <h1 style={styles.title}>查收验证邮件</h1>
           <p style={styles.message}>
-            If an account with that email exists, a password reset link has been
-            sent.
+            如果该邮箱已注册，密码重置链接已发送。
           </p>
           <Link to="/login" style={styles.link}>
-            Back to Sign In
+            返回登录
           </Link>
         </div>
       </div>
@@ -110,12 +109,12 @@ export default function ForgotPasswordPage() {
   return (
     <div style={styles.container}>
       <form style={styles.card} onSubmit={handleSubmit}>
-        <h1 style={styles.title}>Forgot Password</h1>
+        <h1 style={styles.title}>忘记密码</h1>
         <p style={styles.message}>
-          Enter your email and we'll send you a reset link.
+          输入邮箱，我们将发送重置链接。
         </p>
         {error && <div style={{ ...styles.message, color: '#da373c' }}>{error}</div>}
-        <label style={styles.label}>Email</label>
+        <label style={styles.label}>邮箱</label>
         <input
           style={styles.input}
           type="email"
@@ -124,10 +123,10 @@ export default function ForgotPasswordPage() {
           required
         />
         <button style={styles.button} type="submit">
-          Send Reset Link
+          发送重置链接
         </button>
         <Link to="/login" style={styles.link}>
-          Back to Sign In
+          返回登录
         </Link>
       </form>
     </div>

@@ -59,27 +59,27 @@ export default function EmailVerifiedPage() {
       <div style={styles.card}>
         {status === 'loading' && (
           <>
-            <h1 style={styles.title}>Verifying Email</h1>
-            <p style={styles.message}>Please wait while we verify your email address...</p>
+            <h1 style={styles.title}>验证邮箱中</h1>
+            <p style={styles.message}>请稍候，正在验证您的邮箱...</p>
           </>
         )}
         {status === 'success' && (
           <>
-            <h1 style={styles.title}>Email Verified</h1>
-            <p style={styles.message}>Your email has been successfully verified. You can now sign in.</p>
+            <h1 style={styles.title}>邮箱已验证</h1>
+            <p style={styles.message}>邮箱已成功验证，您现在可以登录了。</p>
             <Link to="/login" style={styles.link}>
-              Go to Sign In
+              前往登入
             </Link>
           </>
         )}
         {status === 'error' && (
           <>
-            <h1 style={styles.title}>Verification Failed</h1>
+            <h1 style={styles.title}>验证失败</h1>
             <p style={styles.message}>
-              The verification link is invalid or has expired. Please try registering again.
+              验证链接无效或已过期，请重新注册。
             </p>
             <Link to="/register" style={styles.link}>
-              Back to Register
+              返回注册
             </Link>
           </>
         )}

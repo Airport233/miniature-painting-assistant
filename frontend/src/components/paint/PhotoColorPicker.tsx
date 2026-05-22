@@ -83,7 +83,7 @@ export default function PhotoColorPicker({ onColorPicked }: PhotoColorPickerProp
       />
       {imageLoaded && (
         <p style={styles.instruction}>
-          Click on the image to pick a color
+          点击图片取色
         </p>
       )}
     </div>

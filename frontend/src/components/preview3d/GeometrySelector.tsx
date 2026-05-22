@@ -8,9 +8,9 @@ interface GeometrySelectorProps {
 }
 
 const OPTIONS: { value: GeometryType; label: string }[] = [
-  { value: 'sphere', label: 'Sphere' },
-  { value: 'cube', label: 'Cube' },
-  { value: 'cylinder', label: 'Cylinder' },
+  { value: 'sphere', label: '球体' },
+  { value: 'cube', label: '立方体' },
+  { value: 'cylinder', label: '圆柱体' },
 ];
 
 export default function GeometrySelector({
@@ -57,7 +57,7 @@ export default function GeometrySelector({
 
   return (
     <div style={styles.container}>
-      <h4 style={styles.heading}>Geometry</h4>
+      <h4 style={styles.heading}>几何体</h4>
       <div style={styles.radioGroup}>
         {OPTIONS.map((opt) => (
           <label

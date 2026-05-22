@@ -90,16 +90,16 @@ export default function LoginPage() {
       loginStore(res.token, res.user);
       navigate('/dashboard');
     } catch {
-      setError('Invalid email or password.');
+      setError('邮箱或密码错误。');
     }
   };
 
   return (
     <div style={styles.container}>
       <form style={styles.card} onSubmit={handleSubmit}>
-        <h1 style={styles.title}>Sign In</h1>
+        <h1 style={styles.title}>登入</h1>
         {error && <div style={styles.error}>{error}</div>}
-        <label style={styles.label}>Email</label>
+        <label style={styles.label}>邮箱</label>
         <input
           style={styles.input}
           type="email"
@@ -107,7 +107,7 @@ export default function LoginPage() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <label style={styles.label}>Password</label>
+        <label style={styles.label}>密码</label>
         <input
           style={styles.input}
           type="password"
@@ -116,13 +116,13 @@ export default function LoginPage() {
           required
         />
         <button style={styles.button} type="submit">
-          Sign In
+          登入
         </button>
         <Link to="/register" style={styles.link}>
-          Don't have an account? Register
+          没有账号？注册
         </Link>
         <Link to="/forgot-password" style={styles.link}>
-          Forgot password?
+          忘记密码？
         </Link>
       </form>
     </div>

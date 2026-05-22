@@ -16,7 +16,7 @@ export default function StlUploader({ onModelLoaded }: StlUploaderProps) {
     if (!file) return;
 
     if (!file.name.toLowerCase().endsWith('.stl')) {
-      setError('Please select an .stl file');
+      setError('请选择.stl文件');
       return;
     }
 
@@ -29,7 +29,7 @@ export default function StlUploader({ onModelLoaded }: StlUploaderProps) {
       setModelUrl(result.url);
       onModelLoaded(result.url);
     } catch {
-      setError('Failed to upload model.');
+      setError('上传模型失败。');
     } finally {
       setUploading(false);
     }
@@ -96,7 +96,7 @@ export default function StlUploader({ onModelLoaded }: StlUploaderProps) {
 
   return (
     <div style={styles.container}>
-      <h4 style={styles.heading}>STL Model</h4>
+      <h4 style={styles.heading}>STL模型</h4>
 
       {!modelUrl && (
         <input
@@ -108,7 +108,7 @@ export default function StlUploader({ onModelLoaded }: StlUploaderProps) {
         />
       )}
 
-      {uploading && <div style={styles.uploading}>Uploading...</div>}
+      {uploading && <div style={styles.uploading}>上传中...</div>}
 
       {error && <div style={styles.error}>{error}</div>}
 
@@ -116,7 +116,7 @@ export default function StlUploader({ onModelLoaded }: StlUploaderProps) {
         <div style={styles.statusRow}>
           <span style={styles.filename}>{filename}</span>
           <button onClick={handleDelete} style={styles.deleteBtn}>
-            Delete
+            删除
           </button>
         </div>
       )}

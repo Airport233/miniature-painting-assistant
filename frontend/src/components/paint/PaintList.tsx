@@ -27,7 +27,7 @@ export default function PaintList() {
     : paints;
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('Are you sure you want to delete this paint?')) {
+    if (window.confirm('确认删除这瓶漆料？')) {
       await remove(id);
     }
   };
@@ -165,13 +165,13 @@ export default function PaintList() {
     <div style={styles.container}>
       <div style={styles.header}>
         <div style={styles.filterGroup}>
-          <span style={styles.filterLabel}>Brand</span>
+          <span style={styles.filterLabel}>品牌</span>
           <select
             value={brandFilter}
             onChange={(e) => setBrandFilter(e.target.value)}
             style={styles.filterSelect}
           >
-            <option value="">All</option>
+            <option value="">全部</option>
             {BRANDS.map((b) => (
               <option key={b} value={b}>
                 {b}
@@ -180,12 +180,12 @@ export default function PaintList() {
           </select>
         </div>
         <button onClick={handleAdd} style={styles.addButton}>
-          + Add Paint
+          + 添加漆料
         </button>
       </div>
 
       {loading && paints.length === 0 && (
-        <div style={styles.loadingText}>Loading paints...</div>
+        <div style={styles.loadingText}>正在加载漆料...</div>
       )}
 
       {error && (
@@ -194,11 +194,11 @@ export default function PaintList() {
 
       {!loading && !error && filtered.length === 0 && (
         <div style={styles.emptyText}>
-          <div>No paints found.</div>
+          <div>未找到漆料。</div>
           <div style={styles.emptySubtext}>
             {brandFilter
-              ? 'Try changing the brand filter or add a new paint.'
-              : 'Click "+ Add Paint" to add your first paint.'}
+              ? '尝试更改品牌筛选条件或添加新漆料。'
+              : '点击"+ 添加漆料"添加您的第一瓶漆料。'}
           </div>
         </div>
       )}
@@ -207,11 +207,11 @@ export default function PaintList() {
         <table style={styles.table}>
           <thead>
             <tr>
-              <th style={styles.th}>Color Name</th>
-              <th style={styles.th}>Brand</th>
-              <th style={styles.th}>Code</th>
-              <th style={styles.th}>Swatch</th>
-              <th style={styles.th}>Actions</th>
+              <th style={styles.th}>颜色名称</th>
+              <th style={styles.th}>品牌</th>
+              <th style={styles.th}>色号</th>
+              <th style={styles.th}>色样</th>
+              <th style={styles.th}>操作</th>
             </tr>
           </thead>
           <tbody>
@@ -233,13 +233,13 @@ export default function PaintList() {
                     onClick={() => handleEdit(paint)}
                     style={{ ...styles.actionButton, ...styles.editButton }}
                   >
-                    Edit
+                    编辑
                   </button>
                   <button
                     onClick={() => handleDelete(paint.id)}
                     style={{ ...styles.actionButton, ...styles.deleteButton }}
                   >
-                    Delete
+                    删除
                   </button>
                 </td>
               </tr>

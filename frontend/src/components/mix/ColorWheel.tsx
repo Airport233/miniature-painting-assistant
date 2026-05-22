@@ -37,11 +37,11 @@ interface HarmonyInfo {
 
 function getHarmonies(h: number, s: number, v: number): HarmonyInfo[] {
   return [
-    { label: 'Complementary', hue: (h + 180) % 360, sat: s, val: v },
-    { label: 'Triadic 1', hue: (h + 120) % 360, sat: s, val: v },
-    { label: 'Triadic 2', hue: (h + 240) % 360, sat: s, val: v },
-    { label: 'Analogous 1', hue: (h - 30 + 360) % 360, sat: s, val: v },
-    { label: 'Analogous 2', hue: (h + 30) % 360, sat: s, val: v },
+    { label: '互补色', hue: (h + 180) % 360, sat: s, val: v },
+    { label: '三角色 1', hue: (h + 120) % 360, sat: s, val: v },
+    { label: '三角色 2', hue: (h + 240) % 360, sat: s, val: v },
+    { label: '类比色 1', hue: (h - 30 + 360) % 360, sat: s, val: v },
+    { label: '类比色 2', hue: (h + 30) % 360, sat: s, val: v },
   ];
 }
 
@@ -207,7 +207,7 @@ export default function ColorWheel({ onColorSelected }: ColorWheelProps) {
 
   return (
     <div style={styles.container}>
-      <h3 style={styles.heading}>Color Wheel</h3>
+      <h3 style={styles.heading}>色轮</h3>
 
       {/* Wheel */}
       <div style={styles.wheelWrapper}>
@@ -231,7 +231,7 @@ export default function ColorWheel({ onColorSelected }: ColorWheelProps) {
 
       {/* Harmonies */}
       <div style={{ marginBottom: '12px' }}>
-        <div style={styles.harmonyHeading}>Harmonies</div>
+        <div style={styles.harmonyHeading}>配色方案</div>
         <div style={styles.harmonyGrid}>
           {harmonies.map((h) => {
             const chipRgb = hsvToRgb(h.hue, h.sat, h.val);
@@ -244,7 +244,7 @@ export default function ColorWheel({ onColorSelected }: ColorWheelProps) {
                   onClick={() => handleSetColor(...chipRgb)}
                   style={styles.setTargetBtn}
                 >
-                  Set as target
+                  设为混色目标
                 </button>
               </div>
             );

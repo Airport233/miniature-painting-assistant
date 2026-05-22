@@ -25,9 +25,9 @@ function tempToRgb(temp: number): string {
 }
 
 const PRESETS: { label: string; pos: [number, number, number] }[] = [
-  { label: 'Top', pos: [0, 5, 0] },
-  { label: 'Side', pos: [5, 2, 0] },
-  { label: 'Front', pos: [0, 2, 5] },
+  { label: '顶光', pos: [0, 5, 0] },
+  { label: '侧光', pos: [5, 2, 0] },
+  { label: '正光', pos: [0, 2, 5] },
 ];
 
 export default function LightingControls({
@@ -109,7 +109,7 @@ export default function LightingControls({
 
   return (
     <div style={styles.container}>
-      <h4 style={styles.heading}>Lighting</h4>
+      <h4 style={styles.heading}>光照</h4>
 
       {([0, 1, 2] as const).map((axis) => (
         <div key={axis} style={styles.sliderRow}>

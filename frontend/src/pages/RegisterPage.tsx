@@ -87,8 +87,9 @@ export default function RegisterPage() {
     try {
       await register({ email, password, nickname });
       setSuccess(true);
-    } catch {
-      setError('Registration failed. Please try again.');
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || '注册失败，请重试。';
+      setError(msg);
     }
   };
 
@@ -96,13 +97,12 @@ export default function RegisterPage() {
     return (
       <div style={styles.container}>
         <div style={styles.card}>
-          <h1 style={styles.title}>Check Your Email</h1>
+          <h1 style={styles.title}>查收验证邮件</h1>
           <p style={styles.message}>
-            A verification link has been sent to {email}. Please check your
-            inbox and click the link to activate your account.
+            验证邮件已发送至 {email}。请查收邮箱并点击链接激活账号。
           </p>
           <Link to="/login" style={styles.link}>
-            Back to Sign In
+            返回登录
           </Link>
         </div>
       </div>
@@ -112,9 +112,9 @@ export default function RegisterPage() {
   return (
     <div style={styles.container}>
       <form style={styles.card} onSubmit={handleSubmit}>
-        <h1 style={styles.title}>Create Account</h1>
+        <h1 style={styles.title}>创建账号</h1>
         {error && <div style={{ ...styles.message, color: '#da373c' }}>{error}</div>}
-        <label style={styles.label}>Nickname</label>
+        <label style={styles.label}>昵称</label>
         <input
           style={styles.input}
           type="text"
@@ -122,7 +122,7 @@ export default function RegisterPage() {
           onChange={(e) => setNickname(e.target.value)}
           required
         />
-        <label style={styles.label}>Email</label>
+        <label style={styles.label}>邮箱</label>
         <input
           style={styles.input}
           type="email"
@@ -130,19 +130,20 @@ export default function RegisterPage() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <label style={styles.label}>Password</label>
+        <label style={styles.label}>密码</label>
         <input
           style={styles.input}
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          minLength={8}
         />
         <button style={styles.button} type="submit">
-          Register
+          注册
         </button>
         <Link to="/login" style={styles.link}>
-          Already have an account? Sign In
+          已有账号？登入
         </Link>
       </form>
     </div>
