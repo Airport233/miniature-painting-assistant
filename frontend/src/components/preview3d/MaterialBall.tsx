@@ -133,11 +133,12 @@ function Scene({
       }
 
       if (closest) {
-        const hit = closest;
         e.stopPropagation();
-        onLightSelect(hit.id);
-        dragRef.current = { lightId: hit.id, startPos: hit.point };
+        onLightSelect(closest.id);
+        dragRef.current = { lightId: closest.id, startPos: closest.point };
         setIsDragging(true);
+      } else {
+        onLightSelect(null);
       }
     };
 
