@@ -2174,6 +2174,8 @@ git commit -m "feat: add mixing engine with brute-force search, tricolor referen
 
 ### Task 4.1: Recipe entity + CRUD backend
 
+> **Status:** DONE — commit `d159592` (subagent, TDD: 2/2 tests, 9 files)
+
 **Files:** Create `backend/src/main/java/com/minipaint/model/Recipe.java`, `backend/src/main/java/com/minipaint/model/RecipeComponent.java`, `backend/src/main/java/com/minipaint/repository/RecipeRepository.java`, `backend/src/main/java/com/minipaint/repository/RecipeComponentRepository.java`, `backend/src/main/java/com/minipaint/dto/RecipeRequest.java`, `backend/src/main/java/com/minipaint/dto/RecipeResponse.java`, `backend/src/main/java/com/minipaint/service/RecipeService.java`, `backend/src/main/java/com/minipaint/controller/RecipeController.java`; Create test: `backend/src/test/java/com/minipaint/service/RecipeServiceTest.java`
 
 - [ ] **Step 1: Write failing test**
