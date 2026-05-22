@@ -51,7 +51,9 @@ export default function GeometrySelector({
       padding: '6px 12px',
       backgroundColor: '#1e1f22',
       borderRadius: '4px',
-      border: '1px solid #4e5058',
+      borderWidth: '1px',
+      borderStyle: 'solid',
+      borderColor: '#4e5058',
     },
     radioLabelActive: {
       backgroundColor: '#5865f2',
