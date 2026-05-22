@@ -195,7 +195,8 @@ export default function MaterialBall({
   const styles: Record<string, React.CSSProperties> = {
     container: {
       width: '100%',
-      height: '400px',
+      flex: 1,
+      minHeight: '300px',
       borderRadius: '8px',
       overflow: 'hidden',
       backgroundColor: '#1e1f22',

@@ -139,10 +139,20 @@ export default function WorkspacePage() {
       flexDirection: 'column',
     },
     previewColumn: {
-      overflowY: 'auto',
       minHeight: 0,
       display: 'flex',
       flexDirection: 'column',
+      flex: 1,
+    },
+    controlsPanel: {
+      borderTop: '1px solid #3c3f45',
+      paddingTop: '12px',
+      marginTop: '12px',
+      maxHeight: '200px',
+      overflowY: 'auto',
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr 1fr',
+      gap: '12px',
     },
   };
 
@@ -195,31 +205,30 @@ export default function WorkspacePage() {
             onLightUpdate={handleUpdateLight}
             onColorSampled={handleColorSampled}
           />
-          <LightingControls
-            lights={lights}
-            selectedLightId={selectedLightId}
-            onSelectLight={setSelectedLightId}
-            onUpdateLight={handleUpdateLight}
-            onAddLight={handleAddLight}
-            onRemoveLight={handleRemoveLight}
-          />
-          <MaterialControls
-            color={previewColor}
-            roughness={roughness}
-            metalness={metalness}
-            onColorChange={setPreviewColor}
-            onRoughnessChange={setRoughness}
-            onMetalnessChange={setMetalness}
-            onApplyMixColor={handleApplyMixColor}
-            hasMixColor={hasMixColor}
-          />
-          <GeometrySelector
-            value={geometry}
-            onChange={setGeometry}
-          />
-          <StlUploader
-            onModelLoaded={handleModelLoaded}
-          />
+          <div style={styles.controlsPanel}>
+            <LightingControls
+              lights={lights}
+              selectedLightId={selectedLightId}
+              onSelectLight={setSelectedLightId}
+              onUpdateLight={handleUpdateLight}
+              onAddLight={handleAddLight}
+              onRemoveLight={handleRemoveLight}
+            />
+            <MaterialControls
+              color={previewColor}
+              roughness={roughness}
+              metalness={metalness}
+              onColorChange={setPreviewColor}
+              onRoughnessChange={setRoughness}
+              onMetalnessChange={setMetalness}
+              onApplyMixColor={handleApplyMixColor}
+              hasMixColor={hasMixColor}
+            />
+            <div>
+              <GeometrySelector value={geometry} onChange={setGeometry} />
+              <StlUploader onModelLoaded={handleModelLoaded} />
+            </div>
+          </div>
         </div>
       </div>
     </div>
