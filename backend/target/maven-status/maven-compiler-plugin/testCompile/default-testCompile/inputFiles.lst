@@ -1,1 +1,6 @@
-C:\Users\cc24a\Desktop\AI4SE\.worktrees\phase-0-scaffolding\backend\src\test\java\com\minipaint\MiniPaintApplicationTests.java
+C:\Users\cc24a\Desktop\AI4SE\backend\src\test\java\com\minipaint\MiniPaintApplicationTests.java
+C:\Users\cc24a\Desktop\AI4SE\backend\src\test\java\com\minipaint\service\AuthServiceTest.java
+C:\Users\cc24a\Desktop\AI4SE\backend\src\test\java\com\minipaint\service\MixServiceTest.java
+C:\Users\cc24a\Desktop\AI4SE\backend\src\test\java\com\minipaint\service\ModelServiceTest.java
+C:\Users\cc24a\Desktop\AI4SE\backend\src\test\java\com\minipaint\service\PaintServiceTest.java
+C:\Users\cc24a\Desktop\AI4SE\backend\src\test\java\com\minipaint\service\RecipeServiceTest.java

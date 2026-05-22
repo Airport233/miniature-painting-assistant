@@ -1,1 +1,6 @@
+com\minipaint\service\PaintServiceTest.class
+com\minipaint\service\RecipeServiceTest.class
+com\minipaint\service\MixServiceTest.class
 com\minipaint\MiniPaintApplicationTests.class
+com\minipaint\service\AuthServiceTest.class
+com\minipaint\service\ModelServiceTest.class
