@@ -21,6 +21,7 @@ interface SceneProps {
   lights: LightConfig[];
   geometry: GeometryType;
   modelUrl?: string | null;
+  modelRotation?: [number, number, number];
   selectedLightId: string | null;
   onLightSelect: (id: string | null) => void;
   onLightUpdate: (id: string, updates: Partial<Omit<LightConfig, 'id'>>) => void;
@@ -35,6 +36,7 @@ function Scene({
   lights,
   geometry,
   modelUrl,
+  modelRotation,
   selectedLightId,
   onLightSelect,
   onLightUpdate,
@@ -204,6 +206,7 @@ function Scene({
           color={color}
           roughness={roughness}
           metalness={metalness}
+          rotationDeg={modelRotation}
         />
       ) : (
         <mesh
@@ -226,8 +229,8 @@ function Scene({
         enabled={!isDragging}
         enableDamping
         dampingFactor={0.1}
-        minDistance={2}
-        maxDistance={8}
+        minDistance={0.5}
+        maxDistance={20}
       />
     </>
   );
@@ -238,11 +241,13 @@ function StlModel({
   color,
   roughness,
   metalness,
+  rotationDeg,
 }: {
   url: string;
   color: string;
   roughness: number;
   metalness: number;
+  rotationDeg?: [number, number, number];
 }) {
   const geometry = useLoader(STLLoader, url);
   const meshRef = useRef<THREE.Mesh>(null);
@@ -268,7 +273,13 @@ function StlModel({
   }, [geometry]);
 
   return (
-    <mesh ref={meshRef} geometry={geometry} castShadow receiveShadow>
+    <mesh
+      ref={meshRef}
+      geometry={geometry}
+      castShadow
+      receiveShadow
+      rotation={rotationDeg ? rotationDeg.map((d) => d * Math.PI / 180) as [number, number, number] : [0, 0, 0]}
+    >
       <meshStandardMaterial
         color={color}
         roughness={roughness}
@@ -294,6 +305,7 @@ interface MaterialBallProps {
   lights: LightConfig[];
   geometry?: GeometryType;
   modelUrl?: string | null;
+  modelRotation?: [number, number, number];
   selectedLightId?: string | null;
   onLightSelect?: (id: string | null) => void;
   onLightUpdate?: (id: string, updates: Partial<Omit<LightConfig, 'id'>>) => void;
@@ -307,6 +319,7 @@ export default function MaterialBall({
   lights,
   geometry = 'sphere',
   modelUrl,
+  modelRotation,
   selectedLightId = null,
   onLightSelect,
   onLightUpdate,
@@ -372,6 +385,7 @@ export default function MaterialBall({
           lights={lights}
           geometry={geometry}
           modelUrl={modelUrl}
+          modelRotation={modelRotation}
           selectedLightId={selectedLightId}
           onLightSelect={onLightSelect ?? (() => {})}
           onLightUpdate={onLightUpdate ?? (() => {})}
