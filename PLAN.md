@@ -379,7 +379,7 @@ class MiniPaintApplicationTests {
 
 - [ ] **Step 6: Verify it builds**
 
-Run: `cd backend && ./mvnw test -Dtest=MiniPaintApplicationTests`
+Run: `cd backend && mvn test -Dtest=MiniPaintApplicationTests`
 Expected: BUILD SUCCESS, context loads
 
 - [ ] **Step 7: Commit**
@@ -621,9 +621,9 @@ FROM eclipse-temurin:17-jdk-alpine AS build
 WORKDIR /app
 COPY backend/pom.xml backend/mvnw ./
 COPY backend/.mvn .mvn
-RUN ./mvnw dependency:resolve
+RUN mvn dependency:resolve
 COPY backend/src src
-RUN ./mvnw package -DskipTests
+RUN mvn package -DskipTests
 
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
@@ -752,7 +752,7 @@ class AuthServiceTest {
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `cd backend && ./mvnw test -Dtest=AuthServiceTest`
+Run: `cd backend && mvn test -Dtest=AuthServiceTest`
 Expected: FAIL — User entity or repository does not exist
 
 - [ ] **Step 3: Create User entity**
@@ -887,7 +887,7 @@ public interface VerificationTokenRepository extends JpaRepository<VerificationT
 
 - [ ] **Step 5: Run tests again**
 
-Run: `cd backend && ./mvnw test -Dtest=AuthServiceTest`
+Run: `cd backend && mvn test -Dtest=AuthServiceTest`
 Expected: PASS
 
 - [ ] **Step 6: Commit**
@@ -951,7 +951,7 @@ void shouldFailDuplicateRegistration() {
 }
 ```
 
-Run: `cd backend && ./mvnw test -Dtest=AuthServiceTest`
+Run: `cd backend && mvn test -Dtest=AuthServiceTest`
 Expected: FAIL — AuthService, RegisterRequest not defined
 
 - [ ] **Step 2: Create DTOs**
@@ -1499,7 +1499,7 @@ public class AuthController {
 
 - [ ] **Step 11: Run tests**
 
-Run: `cd backend && ./mvnw test -Dtest=AuthServiceTest -Dspring.profiles.active=dev`
+Run: `cd backend && mvn test -Dtest=AuthServiceTest -Dspring.profiles.active=dev`
 Expected: PASS (may require @ActiveProfiles("dev") on test class)
 
 - [ ] **Step 12: Commit**
@@ -1783,7 +1783,7 @@ public class PaintController {
 
 - [ ] **Step 4: Run test**
 
-Run: `cd backend && ./mvnw test -Dtest=PaintServiceTest`
+Run: `cd backend && mvn test -Dtest=PaintServiceTest`
 Expected: PASS
 
 - [ ] **Step 5: Commit**
@@ -1856,7 +1856,7 @@ public void uploadPhoto(Long paintId, byte[] fileBytes, String filename) {
 
 - [ ] **Step 3: Run test → pass**
 
-Run: `cd backend && ./mvnw test -Dtest=PaintServiceTest`
+Run: `cd backend && mvn test -Dtest=PaintServiceTest`
 Expected: PASS
 
 - [ ] **Step 4: Commit**
@@ -1924,7 +1924,7 @@ class MixServiceTest {
     }
 }
 ```
-Run: `cd backend && ./mvnw test -Dtest=MixServiceTest`
+Run: `cd backend && mvn test -Dtest=MixServiceTest`
 Expected: FAIL
 
 - [ ] **Step 2: Create DTOs**
@@ -2142,7 +2142,7 @@ public class MixController {
 
 - [ ] **Step 5: Run test → pass**
 
-Run: `cd backend && ./mvnw test -Dtest=MixServiceTest`
+Run: `cd backend && mvn test -Dtest=MixServiceTest`
 Expected: PASS
 
 - [ ] **Step 6: Commit**
@@ -2806,7 +2806,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with: { java-version: '17', distribution: 'temurin' }
-      - run: cd backend && ./mvnw test -Dspring.profiles.active=ci
+      - run: cd backend && mvn test -Dspring.profiles.active=ci
         env: { SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/minipaint, SPRING_DATASOURCE_USERNAME: minipaint, SPRING_DATASOURCE_PASSWORD: minipaint }
   frontend-test:
     runs-on: ubuntu-latest
@@ -2831,11 +2831,11 @@ Create `Makefile`:
 .PHONY: test build run
 
 test:
-	cd backend && ./mvnw test -Dspring.profiles.active=dev
+	cd backend && mvn test -Dspring.profiles.active=dev
 	cd frontend && npm test -- --run
 
 build:
-	cd backend && ./mvnw package -DskipTests
+	cd backend && mvn package -DskipTests
 	cd frontend && npm run build
 
 run:
@@ -2865,7 +2865,7 @@ docker-compose up --build
 
 ```bash
 # Backend
-cd backend && ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+cd backend && mvn spring-boot:run -Dspring-boot.run.profiles=dev
 
 # Frontend
 cd frontend && npm run dev
