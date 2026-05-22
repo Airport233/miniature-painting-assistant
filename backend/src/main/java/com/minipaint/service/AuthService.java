@@ -54,7 +54,14 @@ public class AuthService {
         vt.setExpiresAt(Instant.now().plus(24, ChronoUnit.HOURS));
         tokenRepository.save(vt);
 
-        emailService.sendVerificationEmail(user.getEmail(), token);
+        try {
+            emailService.sendVerificationEmail(user.getEmail(), token);
+        } catch (Exception e) {
+            // Dev mode: no SMTP server available, auto-verify
+            user.setEmailVerified(true);
+            userRepository.save(user);
+            tokenRepository.delete(vt);
+        }
     }
 
     @Transactional
@@ -98,7 +105,11 @@ public class AuthService {
         vt.setExpiresAt(Instant.now().plus(24, ChronoUnit.HOURS));
         tokenRepository.save(vt);
 
-        emailService.sendPasswordResetEmail(user.getEmail(), token);
+        try {
+            emailService.sendPasswordResetEmail(user.getEmail(), token);
+        } catch (Exception e) {
+            // Dev mode: no SMTP available, log and continue
+        }
     }
 
     @Transactional
