@@ -172,6 +172,8 @@ README.md
 
 ### Task 0.1: Initialize Spring Boot project
 
+> **Status:** DONE — commit `12463a1` (merged via PR #1)
+
 **Files:**
 - Create: `backend/pom.xml`
 - Create: `backend/src/main/java/com/minipaint/MiniPaintApplication.java`
@@ -393,6 +395,8 @@ git commit -m "feat: scaffold Spring Boot project with dependencies"
 
 ### Task 0.2: Initialize React + Vite frontend
 
+> **Status:** DONE — commit `11e9f63` (merged via PR #1)
+
 **Files:**
 - Create: `frontend/package.json`
 - Create: `frontend/vite.config.ts`
@@ -553,6 +557,8 @@ git commit -m "feat: scaffold React + Vite + Three.js frontend"
 ---
 
 ### Task 0.3: Docker Compose scaffold
+
+> **Status:** DONE — commit `11e9f63` (merged via PR #1)
 
 **Files:**
 - Create: `docker-compose.yml`
