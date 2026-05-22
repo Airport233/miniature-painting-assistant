@@ -1,9 +1,7 @@
 import React, { useState, useCallback } from 'react';
-import PaintList from '../components/paint/PaintList';
 import TargetColorPicker from '../components/mix/TargetColorPicker';
 import MixResultList from '../components/mix/MixResultList';
 import ColorWheel from '../components/mix/ColorWheel';
-import RecipeList from '../components/recipe/RecipeList';
 import MaterialBall from '../components/preview3d/MaterialBall';
 import LightingControls from '../components/preview3d/LightingControls';
 import MaterialControls from '../components/preview3d/MaterialControls';
@@ -12,20 +10,35 @@ import StlUploader from '../components/preview3d/StlUploader';
 import type { MixResponse } from '../types';
 
 type GeometryType = 'sphere' | 'cube' | 'cylinder';
-type LeftTab = 'paints' | 'recipes';
 
-export default function DashboardPage() {
+export interface LightConfig {
+  id: string;
+  position: [number, number, number];
+  intensity: number;
+  color: string;
+  enabled: boolean;
+}
+
+let lightCounter = 0;
+function createLight(
+  position: [number, number, number],
+  intensity = 1.5,
+  color = '#ffffff'
+): LightConfig {
+  lightCounter += 1;
+  return { id: `light-${lightCounter}`, position, intensity, color, enabled: true };
+}
+
+export default function WorkspacePage() {
   const [mixResult, setMixResult] = useState<MixResponse | null>(null);
   const [previewColor, setPreviewColor] = useState('#808080');
   const [roughness, setRoughness] = useState(0.5);
   const [metalness, setMetalness] = useState(0.0);
   const [geometry, setGeometry] = useState<GeometryType>('sphere');
-  const [lightPosition, setLightPosition] = useState<[number, number, number]>([5, 5, 5]);
-  const [lightIntensity, setLightIntensity] = useState(1.5);
+  const [lights, setLights] = useState<LightConfig[]>([createLight([5, 5, 5])]);
+  const [selectedLightId, setSelectedLightId] = useState<string | null>(lights[0]?.id ?? null);
   const [hasMixColor, setHasMixColor] = useState(false);
-  const [showPaintList, setShowPaintList] = useState(true);
   const [showColorWheel, setShowColorWheel] = useState(false);
-  const [leftTab, setLeftTab] = useState<LeftTab>('paints');
 
   const handleMixResult = useCallback((result: MixResponse) => {
     setMixResult(result);
@@ -52,6 +65,33 @@ export default function DashboardPage() {
     // Model URL stored for future use
   }, []);
 
+  const handleUpdateLight = useCallback(
+    (id: string, updates: Partial<Omit<LightConfig, 'id'>>) => {
+      setLights((prev) =>
+        prev.map((l) => (l.id === id ? { ...l, ...updates } : l))
+      );
+    },
+    []
+  );
+
+  const handleAddLight = useCallback(() => {
+    const newLight = createLight([0, 8, 0]);
+    setLights((prev) => [...prev, newLight]);
+    setSelectedLightId(newLight.id);
+  }, []);
+
+  const handleRemoveLight = useCallback((id: string) => {
+    setLights((prev) => {
+      const filtered = prev.filter((l) => l.id !== id);
+      if (filtered.length === 0) {
+        const fallback = createLight([5, 5, 5]);
+        return [fallback];
+      }
+      return filtered;
+    });
+    setSelectedLightId((prev) => (prev === id ? null : prev));
+  }, []);
+
   const styles: Record<string, React.CSSProperties> = {
     pageContainer: {
       padding: '24px',
@@ -75,7 +115,7 @@ export default function DashboardPage() {
       fontSize: '14px',
       marginTop: '4px',
     },
-    togglePaintBtn: {
+    toggleBtn: {
       padding: '6px 14px',
       backgroundColor: '#4e5058',
       border: 'none',
@@ -87,52 +127,22 @@ export default function DashboardPage() {
     },
     grid: {
       display: 'grid',
-      gridTemplateColumns: showPaintList ? '280px 1fr 400px' : '0px 1fr 400px',
+      gridTemplateColumns: '320px 1fr',
       gap: '16px',
       flex: 1,
       minHeight: 0,
-      transition: 'grid-template-columns 0.2s ease',
     },
-    leftColumn: {
+    mixColumn: {
       overflowY: 'auto',
       minHeight: 0,
       display: 'flex',
       flexDirection: 'column',
     },
-    centerColumn: {
+    previewColumn: {
       overflowY: 'auto',
       minHeight: 0,
       display: 'flex',
       flexDirection: 'column',
-    },
-    rightColumn: {
-      overflowY: 'auto',
-      minHeight: 0,
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    tabBar: {
-      display: 'flex',
-      gap: '0',
-      backgroundColor: '#2b2d31',
-      borderRadius: '8px 8px 0 0',
-    },
-    tab: {
-      flex: 1,
-      padding: '10px 16px',
-      backgroundColor: 'transparent',
-      border: 'none',
-      borderBottom: '2px solid transparent',
-      color: '#949ba0',
-      fontSize: '13px',
-      fontWeight: 600,
-      cursor: 'pointer',
-      transition: 'color 0.15s, border-color 0.15s',
-    },
-    tabContent: {
-      flex: 1,
-      minHeight: 0,
-      overflowY: 'auto',
     },
   };
 
@@ -143,58 +153,20 @@ export default function DashboardPage() {
           <h1 style={styles.heading}>工作台</h1>
           <p style={styles.subtitle}>混色与3D预览</p>
         </div>
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <button
-            onClick={() => setShowColorWheel(!showColorWheel)}
-            style={{
-              ...styles.togglePaintBtn,
-              backgroundColor: showColorWheel ? '#5865f2' : '#4e5058',
-            }}
-          >
-            {showColorWheel ? '隐藏色轮' : '色轮'}
-          </button>
-          <button
-            onClick={() => setShowPaintList(!showPaintList)}
-            style={styles.togglePaintBtn}
-          >
-            {showPaintList ? '隐藏漆料列表' : '显示漆料列表'}
-          </button>
-        </div>
+        <button
+          onClick={() => setShowColorWheel(!showColorWheel)}
+          style={{
+            ...styles.toggleBtn,
+            backgroundColor: showColorWheel ? '#5865f2' : '#4e5058',
+          }}
+        >
+          {showColorWheel ? '隐藏色轮' : '色轮'}
+        </button>
       </div>
 
       <div style={styles.grid}>
-        {/* Left Column: Paint List / Recipes */}
-        <div
-          style={styles.leftColumn}
-          hidden={!showPaintList}
-        >
-          <div style={styles.tabBar}>
-            <button
-              onClick={() => setLeftTab('paints')}
-              style={{
-                ...styles.tab,
-                ...(leftTab === 'paints' ? { color: '#dbdee1', borderBottomColor: '#5865f2' } : {}),
-              }}
-            >
-              漆料
-            </button>
-            <button
-              onClick={() => setLeftTab('recipes')}
-              style={{
-                ...styles.tab,
-                ...(leftTab === 'recipes' ? { color: '#dbdee1', borderBottomColor: '#5865f2' } : {}),
-              }}
-            >
-              配方
-            </button>
-          </div>
-          <div style={styles.tabContent}>
-            {leftTab === 'paints' ? <PaintList /> : <RecipeList />}
-          </div>
-        </div>
-
-        {/* Center Column: Color Wheel + Target Color + Mix Results */}
-        <div style={styles.centerColumn}>
+        {/* Left Column: Mix panel */}
+        <div style={styles.mixColumn}>
           {showColorWheel && (
             <ColorWheel onColorSelected={handleColorSelected} />
           )}
@@ -211,20 +183,25 @@ export default function DashboardPage() {
         </div>
 
         {/* Right Column: 3D Preview + Controls */}
-        <div style={styles.rightColumn}>
+        <div style={styles.previewColumn}>
           <MaterialBall
             color={previewColor}
             roughness={roughness}
             metalness={metalness}
-            lightPosition={lightPosition}
+            lights={lights}
             geometry={geometry}
+            selectedLightId={selectedLightId}
+            onLightSelect={setSelectedLightId}
+            onLightUpdate={handleUpdateLight}
             onColorSampled={handleColorSampled}
           />
           <LightingControls
-            lightPosition={lightPosition}
-            lightIntensity={lightIntensity}
-            onPositionChange={setLightPosition}
-            onIntensityChange={setLightIntensity}
+            lights={lights}
+            selectedLightId={selectedLightId}
+            onSelectLight={setSelectedLightId}
+            onUpdateLight={handleUpdateLight}
+            onAddLight={handleAddLight}
+            onRemoveLight={handleRemoveLight}
           />
           <MaterialControls
             color={previewColor}

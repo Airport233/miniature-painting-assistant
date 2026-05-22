@@ -1,48 +1,39 @@
 import React from 'react';
+import type { LightConfig } from '../preview3d/MaterialBall';
 
 interface LightingControlsProps {
-  lightPosition: [number, number, number];
-  lightIntensity: number;
-  onPositionChange: (pos: [number, number, number]) => void;
-  onIntensityChange: (intensity: number) => void;
+  lights: LightConfig[];
+  selectedLightId: string | null;
+  onSelectLight: (id: string | null) => void;
+  onUpdateLight: (id: string, updates: Partial<Omit<LightConfig, 'id'>>) => void;
+  onAddLight: () => void;
+  onRemoveLight: (id: string) => void;
 }
 
-function tempToRgb(temp: number): string {
-  const t = temp / 100;
-  let r: number, g: number, b: number;
-  if (t <= 66) {
-    r = 255;
-    g = 99.4708025861 * Math.log(t) - 161.1195681661;
-    b = t <= 19 ? 0 : 138.5177312231 * Math.log(t - 10) - 305.0447927307;
-  } else {
-    r = 329.698727446 * Math.pow(t - 60, -0.1332047592);
-    g = 288.1221695283 * Math.pow(t - 60, -0.0755148492);
-    b = 255;
-  }
-  const clamp = (n: number) =>
-    Math.max(0, Math.min(255, Math.round(n)));
-  return `rgb(${clamp(r)},${clamp(g)},${clamp(b)})`;
-}
-
-const PRESETS: { label: string; pos: [number, number, number] }[] = [
-  { label: '顶光', pos: [0, 5, 0] },
-  { label: '侧光', pos: [5, 2, 0] },
-  { label: '正光', pos: [0, 2, 5] },
+const COLOR_PRESETS = [
+  { label: '暖光 3200K', color: '#ffb878' },
+  { label: '中性 5500K', color: '#ffe8cc' },
+  { label: '冷光 6500K', color: '#ccddff' },
 ];
 
 export default function LightingControls({
-  lightPosition,
-  lightIntensity,
-  onPositionChange,
-  onIntensityChange,
+  lights,
+  selectedLightId,
+  onSelectLight,
+  onUpdateLight,
+  onAddLight,
+  onRemoveLight,
 }: LightingControlsProps) {
+  const selectedLight = lights.find((l) => l.id === selectedLightId) ?? null;
+
   const handleSlider = (
+    light: LightConfig,
     axis: 0 | 1 | 2,
     value: number
   ) => {
-    const newPos: [number, number, number] = [...lightPosition];
+    const newPos: [number, number, number] = [...light.position];
     newPos[axis] = value;
-    onPositionChange(newPos);
+    onUpdateLight(light.id, { position: newPos });
   };
 
   const styles: Record<string, React.CSSProperties> = {
@@ -58,6 +49,60 @@ export default function LightingControls({
       fontWeight: 700,
       marginBottom: '12px',
     },
+    lightList: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '6px',
+      marginBottom: '12px',
+    },
+    lightItem: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      padding: '8px 10px',
+      borderRadius: '6px',
+      backgroundColor: '#1e1f22',
+      border: '1px solid transparent',
+      cursor: 'pointer',
+      transition: 'border-color 0.15s, background-color 0.15s',
+    },
+    lightItemSelected: {
+      borderColor: '#5865f2',
+      backgroundColor: '#23252a',
+    },
+    colorDot: {
+      width: '12px',
+      height: '12px',
+      borderRadius: '50%',
+      flexShrink: 0,
+      border: '1px solid #4e5058',
+    },
+    lightName: {
+      color: '#dbdee1',
+      fontSize: '13px',
+      fontWeight: 500,
+      flex: 1,
+    },
+    deleteBtn: {
+      padding: '2px 8px',
+      backgroundColor: 'transparent',
+      border: 'none',
+      color: '#949ba0',
+      fontSize: '14px',
+      cursor: 'pointer',
+      borderRadius: '4px',
+      lineHeight: 1,
+    },
+    detailsSection: {
+      borderTop: '1px solid #4e5058',
+      paddingTop: '12px',
+    },
+    selectedHeading: {
+      color: '#b5bac1',
+      fontSize: '12px',
+      fontWeight: 700,
+      marginBottom: '10px',
+    },
     sliderRow: {
       display: 'flex',
       alignItems: 'center',
@@ -69,7 +114,7 @@ export default function LightingControls({
       fontSize: '12px',
       fontWeight: 600,
       width: '16px',
-      textTransform: 'uppercase',
+      textTransform: 'uppercase' as const,
     },
     slider: {
       flex: 1,
@@ -79,31 +124,63 @@ export default function LightingControls({
       color: '#dbdee1',
       fontSize: '12px',
       width: '32px',
-      textAlign: 'right',
+      textAlign: 'right' as const,
     },
-    presets: {
+    colorPresets: {
       display: 'flex',
       gap: '8px',
-      marginTop: '8px',
+      marginTop: '4px',
+      marginBottom: '10px',
     },
     presetBtn: {
       flex: 1,
-      padding: '6px',
+      padding: '6px 4px',
       backgroundColor: '#1e1f22',
       border: '1px solid #4e5058',
       borderRadius: '4px',
       color: '#dbdee1',
-      fontSize: '12px',
+      fontSize: '10px',
       fontWeight: 600,
       cursor: 'pointer',
-      textAlign: 'center',
+      textAlign: 'center' as const,
     },
-    colorPreview: {
+    colorInputRow: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      marginBottom: '8px',
+    },
+    colorInput: {
+      width: '36px',
+      height: '28px',
+      padding: '0',
+      border: '1px solid #4e5058',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      backgroundColor: 'transparent',
+    },
+    colorInputLabel: {
+      color: '#b5bac1',
+      fontSize: '11px',
+      fontWeight: 600,
+    },
+    addBtn: {
       width: '100%',
-      height: '4px',
-      borderRadius: '2px',
-      marginTop: '8px',
-      backgroundColor: tempToRgb(5500),
+      padding: '8px',
+      backgroundColor: 'transparent',
+      border: '1px dashed #4e5058',
+      borderRadius: '6px',
+      color: '#949ba0',
+      fontSize: '13px',
+      fontWeight: 600,
+      cursor: 'pointer',
+      transition: 'border-color 0.15s, color 0.15s',
+    },
+    noSelection: {
+      color: '#949ba0',
+      fontSize: '12px',
+      fontStyle: 'italic',
+      paddingTop: '4px',
     },
   };
 
@@ -111,57 +188,130 @@ export default function LightingControls({
     <div style={styles.container}>
       <h4 style={styles.heading}>光照</h4>
 
-      {([0, 1, 2] as const).map((axis) => (
-        <div key={axis} style={styles.sliderRow}>
-          <span style={styles.sliderLabel}>
-            {['X', 'Y', 'Z'][axis]}
-          </span>
-          <input
-            type="range"
-            min={-10}
-            max={10}
-            step={0.5}
-            value={lightPosition[axis]}
-            onChange={(e) =>
-              handleSlider(axis, parseFloat(e.target.value))
-            }
-            style={styles.slider}
-          />
-          <span style={styles.sliderValue}>
-            {lightPosition[axis].toFixed(1)}
-          </span>
-        </div>
-      ))}
-
-      <div style={styles.sliderRow}>
-        <span style={styles.sliderLabel}>I</span>
-        <input
-          type="range"
-          min={0}
-          max={3}
-          step={0.1}
-          value={lightIntensity}
-          onChange={(e) =>
-            onIntensityChange(parseFloat(e.target.value))
-          }
-          style={styles.slider}
-        />
-        <span style={styles.sliderValue}>
-          {lightIntensity.toFixed(1)}
-        </span>
-      </div>
-
-      <div style={styles.presets}>
-        {PRESETS.map((preset) => (
-          <button
-            key={preset.label}
-            onClick={() => onPositionChange(preset.pos)}
-            style={styles.presetBtn}
+      {/* Light list */}
+      <div style={styles.lightList}>
+        {lights.map((light, index) => (
+          <div
+            key={light.id}
+            onClick={() => onSelectLight(light.id)}
+            style={{
+              ...styles.lightItem,
+              ...(light.id === selectedLightId ? styles.lightItemSelected : {}),
+            }}
           >
-            {preset.label}
-          </button>
+            <div
+              style={{
+                ...styles.colorDot,
+                backgroundColor: light.color,
+              }}
+            />
+            <span style={styles.lightName}>光源 {index + 1}</span>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemoveLight(light.id);
+              }}
+              style={styles.deleteBtn}
+              title="删除光源"
+            >
+              ✕
+            </button>
+          </div>
         ))}
       </div>
+
+      {/* Selected light details */}
+      {selectedLight ? (
+        <div style={styles.detailsSection}>
+          <div style={styles.selectedHeading}>位置与颜色</div>
+
+          {([0, 1, 2] as const).map((axis) => (
+            <div key={axis} style={styles.sliderRow}>
+              <span style={styles.sliderLabel}>
+                {['X', 'Y', 'Z'][axis]}
+              </span>
+              <input
+                type="range"
+                min={-10}
+                max={10}
+                step={0.5}
+                value={selectedLight.position[axis]}
+                onChange={(e) =>
+                  handleSlider(selectedLight, axis, parseFloat(e.target.value))
+                }
+                style={styles.slider}
+              />
+              <span style={styles.sliderValue}>
+                {selectedLight.position[axis].toFixed(1)}
+              </span>
+            </div>
+          ))}
+
+          {/* Color presets */}
+          <div style={styles.colorPresets}>
+            {COLOR_PRESETS.map((preset) => (
+              <button
+                key={preset.label}
+                onClick={() => onUpdateLight(selectedLight.id, { color: preset.color })}
+                style={{
+                  ...styles.presetBtn,
+                  ...(selectedLight.color === preset.color
+                    ? { borderColor: '#5865f2', color: '#fff' }
+                    : {}),
+                }}
+              >
+                {preset.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Custom color */}
+          <div style={styles.colorInputRow}>
+            <span style={styles.colorInputLabel}>自定义</span>
+            <input
+              type="color"
+              value={selectedLight.color}
+              onChange={(e) =>
+                onUpdateLight(selectedLight.id, { color: e.target.value })
+              }
+              style={styles.colorInput}
+            />
+            <span style={{ color: '#dbdee1', fontSize: '11px' }}>
+              {selectedLight.color}
+            </span>
+          </div>
+
+          {/* Intensity */}
+          <div style={styles.sliderRow}>
+            <span style={styles.sliderLabel}>I</span>
+            <input
+              type="range"
+              min={0}
+              max={3}
+              step={0.1}
+              value={selectedLight.intensity}
+              onChange={(e) =>
+                onUpdateLight(selectedLight.id, {
+                  intensity: parseFloat(e.target.value),
+                })
+              }
+              style={styles.slider}
+            />
+            <span style={styles.sliderValue}>
+              {selectedLight.intensity.toFixed(1)}
+            </span>
+          </div>
+        </div>
+      ) : (
+        <div style={styles.noSelection}>
+          选择一个光源查看详细设置
+        </div>
+      )}
+
+      {/* Add light button */}
+      <button onClick={onAddLight} style={{ ...styles.addBtn, marginTop: '12px' }}>
+        + 添加光源
+      </button>
     </div>
   );
 }
