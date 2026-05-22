@@ -208,8 +208,24 @@ export default function MaterialBall({
     },
   };
 
+  const lightsRef = useRef(lights);
+  lightsRef.current = lights;
+
+  const handleWheel = useCallback(
+    (e: React.WheelEvent) => {
+      if (!selectedLightId || !onLightUpdate) return;
+      const current = lightsRef.current.find((l) => l.id === selectedLightId);
+      if (!current) return;
+      const delta = e.deltaY > 0 ? -0.3 : 0.3;
+      onLightUpdate(selectedLightId, {
+        position: [current.position[0], current.position[1], current.position[2] + delta],
+      });
+    },
+    [selectedLightId, onLightUpdate]
+  );
+
   return (
-    <div style={styles.container}>
+    <div style={styles.container} onWheel={handleWheel}>
       <Canvas
         camera={{ position: [0, 0, 4], fov: 45 }}
         gl={{ antialias: true }}
