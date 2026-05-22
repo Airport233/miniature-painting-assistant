@@ -133,7 +133,7 @@
 ```
 ┌──────────────────────────────────────────────────────────┐
 │                   Web 前端 (React 18 + TypeScript)        │
-│    Open Design: Dashboard 设计系统 + frontend-design      │
+│    Open Design: Discord 设计系统 + frontend-design      │
 │                 + threejs + login-flow + platform-design   │
 ├──────────────┬───────────────┬──────────────┬─────────────┤
 │  漆料库 UI    │  混色引擎 UI   │  3D 预览 UI  │  账户/配方   │
@@ -301,7 +301,7 @@ UserSettings
 | 前端框架 | React + TypeScript | 18+ | 生态最成熟；Three.js (@react-three/fiber) 集成最方便 |
 | 3D 引擎 | Three.js | latest | STL 加载、MeshStandardMaterial (roughness/metalness)、OrbitControls 全部就绪 |
 | 前端设计 | **Open Design** | — | **作业强制要求** |
-| 设计系统 | Dashboard | — | 天然适配多面板工具布局（漆库面板 + 混色面板 + 3D 工作区） |
+| 设计系统 | Discord | — | 暗色 UI 契合模型玩家社区氛围（Discord 为主要交流平台），暗调背景不抢夺 3D 工作区的视觉焦点 |
 | Skills | frontend-design, threejs, login-flow, platform-design | — | 分别覆盖通用 UI、3D 场景、认证流程、平台工具型界面 |
 | 数据库 | PostgreSQL | 16 | 结构化数据 + JSONB 灵活字段；Spring Data JPA 无缝集成 |
 | 认证 | Spring Security + JavaMail | — | 邮箱验证免外部服务费用；bcrypt 密码哈希 |

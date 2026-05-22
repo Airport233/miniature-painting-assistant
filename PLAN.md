@@ -4,7 +4,7 @@
 
 **Goal:** Build a web tool for miniature painters to photograph their paints, calculate mixing recipes from a target color, and preview results on 3D material balls with adjustable lighting.
 
-**Architecture:** Spring Boot 3 REST API (Java 17) + React 18 SPA (TypeScript) with Three.js 3D preview + PostgreSQL 16. Frontend UI driven by Open Design Dashboard design system via MCP. Docker Compose for orchestration, GitHub Actions for CI.
+**Architecture:** Spring Boot 3 REST API (Java 17) + React 18 SPA (TypeScript) with Three.js 3D preview + PostgreSQL 16. Frontend UI driven by Open Design Discord design system via MCP. Docker Compose for orchestration, GitHub Actions for CI.
 
 **Tech Stack:** Java 17, Spring Boot 3, Spring Security, JPA/Hibernate, PostgreSQL 16, React 18, TypeScript, Three.js, React Three Fiber, Zustand, Axios, Vite, JUnit 5, Mockito, Vitest, Docker, docker-compose, GitHub Actions
 
@@ -116,7 +116,7 @@ src/
 │   ├── RegisterPage.tsx
 │   ├── ForgotPasswordPage.tsx
 │   ├── ResetPasswordPage.tsx
-│   ├── DashboardPage.tsx
+│   ├── DiscordPage.tsx
 │   └── EmailVerifiedPage.tsx
 ├── components/
 │   ├── paint/
@@ -2598,7 +2598,7 @@ import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import EmailVerifiedPage from './pages/EmailVerifiedPage';
-import DashboardPage from './pages/DashboardPage';
+import DiscordPage from './pages/DiscordPage';
 import ProtectedRoute from './components/common/ProtectedRoute';
 
 export default function App() {
@@ -2610,7 +2610,7 @@ export default function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/verify-email" element={<EmailVerifiedPage />} />
-        <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+        <Route path="/dashboard" element={<ProtectedRoute><DiscordPage /></ProtectedRoute>} />
         <Route path="*" element={<Navigate to="/dashboard" />} />
       </Routes>
     </BrowserRouter>
@@ -2719,11 +2719,11 @@ git commit -m "feat: add 3D material ball preview with Three.js, STL upload, lig
 
 ---
 
-## Phase 9: Mixing + Dashboard UI
+## Phase 9: Mixing + Discord UI
 
-### Task 9.1: Mix panel + Dashboard page
+### Task 9.1: Mix panel + Discord page
 
-**Files:** Create `frontend/src/components/mix/TargetColorPicker.tsx`, `frontend/src/components/mix/MixResultCard.tsx`, `frontend/src/components/mix/MixResultList.tsx`; Modify `frontend/src/pages/DashboardPage.tsx`
+**Files:** Create `frontend/src/components/mix/TargetColorPicker.tsx`, `frontend/src/components/mix/MixResultCard.tsx`, `frontend/src/components/mix/MixResultList.tsx`; Modify `frontend/src/pages/DiscordPage.tsx`
 
 - [ ] **Step 1: Create TargetColorPicker**
 
@@ -2735,9 +2735,9 @@ git commit -m "feat: add 3D material ball preview with Three.js, STL upload, lig
 
 `MixResultList.tsx`: renders the tricolor reference at top, then candidate cards sorted by ΔE. "Save all as recipe" option.
 
-- [ ] **Step 3: Wire up DashboardPage with 3-panel layout**
+- [ ] **Step 3: Wire up DiscordPage with 3-panel layout**
 
-`DashboardPage.tsx`: CSS Grid layout with 3 columns:
+`DiscordPage.tsx`: CSS Grid layout with 3 columns:
 - Left: PaintList (collapsible)
 - Center: Mix panel (TargetColorPicker + MixResultList)
 - Right: 3D preview (MaterialBall + controls)
@@ -2899,7 +2899,7 @@ make test
 
 - Backend: Java 17 + Spring Boot 3 + PostgreSQL 16
 - Frontend: React 18 + TypeScript + Three.js (React Three Fiber)
-- UI Design: Open Design (Dashboard design system)
+- UI Design: Open Design (Discord design system)
 - Deployment: Docker + docker-compose + GitHub Actions
 
 ## Directory Structure

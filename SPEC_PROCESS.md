@@ -81,7 +81,7 @@
 | 决策 | AI 建议 | 我的处理 | 结果 |
 |------|---------|----------|------|
 | 认证方式 | 邮箱 + 密码，避免短信费用 | **采纳** — 合理，学生项目零成本 | 写入 SPEC §3.1 |
-| 前端设计系统 | Dashboard（而非 Linear/Discord/GitHub） | **采纳** — 多面板布局天然适配 | 写入 SPEC §8 |
+| 前端设计系统 | Dashboard → **Discord**（修订） | **采纳后修订** — 用户重新审视 Open Design 界面后，改为 Discord 暗色调。理由：模型玩家社区以 Discord 为主要交流平台，暗调 UI 不抢夺 3D 工作区视觉焦点 | 写入 SPEC §8（已修订） |
 | 文件存储 | 本地磁盘 + Docker volume | **采纳** — 学生项目够用 | 写入 SPEC §8 |
 | Open Design skill | frontend-design + threejs + login-flow + platform-design | **采纳** — 覆盖全部模块 | 写入 SPEC §8 |
 | 配方分享 | 先不做公开分享 | **采纳** — 个人项目无社区效果 | 写入 SPEC §3.5 |
@@ -101,8 +101,8 @@
 **不满的地方：**
 
 1. **对领域知识的依赖**。Brainstorming 在追问时会基于常识推断，但在微缩模型涂装这个垂直领域，它不知道 BSL/NMM/TMM/glazing 等技法术语。我需要补充解释。好的一面是它会诚恳追问而非假装理解。
-2. **冷启动问题未被及时发现**。Brainstorming 产出的 SPEC 中没有指定 Maven 是 wrapper 还是 system。这个问题在 PLAN 中也没有——直到冷启动验证时被另一个 agent 抓出来。这说明 brainstorming 阶段缺乏对"构建工具链细节"的追问，更多聚焦在业务逻辑上。
-3. **Open Design 设计系统选择的决策过程有点"拍脑袋"**。我选了 Dashboard 是因为 AI 说它"天然适配多面板布局"，但我实际上没有横向对比其他系统的视觉截图。这个选择本质上是基于文字描述而非视觉证据做出的。
+2. **冷启动问题未被及时发现**。Brainstorming 产出的 SPEC 中没有指定 Maven 是 wrapper 还是 system。这个问题在 PLAN 中也没有——直到冷启动验证时被 codex 抓出来。这说明 brainstorming 阶段缺乏对"构建工具链细节"的追问，更多聚焦在业务逻辑上。
+3. **Open Design 设计系统选择的决策过程有点随意**。我选了 Dashboard 是因为 AI 说它"天然适配多面板布局"，但我实际上没有横向对比其他系统的视觉截图。这个选择本质上是基于文字描述而非视觉证据做出的。
 
 ---
 
