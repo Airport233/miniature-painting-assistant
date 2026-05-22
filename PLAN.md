@@ -687,6 +687,8 @@ git commit -m "feat: add Docker Compose scaffold with PostgreSQL, backend, front
 
 ### Task 1.1: User entity and repository
 
+> **Status:** DONE — commit `969e577` (subagent, TDD: 2/2 tests)
+
 **Files:**
 - Create: `backend/src/main/java/com/minipaint/model/User.java`
 - Create: `backend/src/main/java/com/minipaint/model/VerificationToken.java`
@@ -906,6 +908,8 @@ git commit -m "feat: add User and VerificationToken entities with repositories"
 ---
 
 ### Task 1.2: Auth service — register, login, verify, reset
+
+> **Status:** DONE — commit `9105a2e` (subagent, TDD: 4/4 tests, 15 files)
 
 **Files:**
 - Create: `backend/src/main/java/com/minipaint/dto/RegisterRequest.java`
