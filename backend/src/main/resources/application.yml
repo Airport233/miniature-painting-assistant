@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: mini-paint
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/minipaint}
+    username: ${SPRING_DATASOURCE_USERNAME:minipaint}
+    password: ${SPRING_DATASOURCE_PASSWORD:minipaint}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  mail:
+    host: ${MAIL_HOST:smtp.qq.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:change-me-in-production-minimum-256-bits}
+    expiration-ms: 86400000
+  upload-dir: ${UPLOAD_DIR:./uploads}
+  base-url: ${BASE_URL:http://localhost:8080}
