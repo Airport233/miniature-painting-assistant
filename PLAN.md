@@ -2293,6 +2293,8 @@ git commit -m "feat: add recipe CRUD with components (paint_id + ratio)"
 
 ### Task 5.1: STL model upload + user settings
 
+> **Status:** DONE — commit `c3dec90` (subagent, TDD: 2/2 tests, 12 files, PR #6)
+
 **Files:** Create `backend/src/main/java/com/minipaint/model/SavedModel.java`, `backend/src/main/java/com/minipaint/model/UserSettings.java`, `backend/src/main/java/com/minipaint/repository/SavedModelRepository.java`, `backend/src/main/java/com/minipaint/repository/UserSettingsRepository.java`, `backend/src/main/java/com/minipaint/service/ModelService.java`, `backend/src/main/java/com/minipaint/controller/ModelController.java`, `backend/src/main/java/com/minipaint/controller/UserSettingsController.java`
 
 Implement following the same TDD pattern: failing test → entity + repo → service → controller → pass → commit.
@@ -2315,6 +2317,8 @@ Expected commit for this block when completed.
 ## Phase 6: Global Exception Handler
 
 ### Task 6.1: Exception handler + health endpoint
+
+> **Status:** DONE — bundled with Task 1.2 (commit `9105a2e`, PR #2)
 
 **Files:** Create `backend/src/main/java/com/minipaint/exception/GlobalExceptionHandler.java`, `backend/src/main/java/com/minipaint/exception/ResourceNotFoundException.java`; Modify `backend/src/main/java/com/minipaint/config/SecurityConfig.java`
 
@@ -2390,6 +2394,8 @@ git commit -m "feat: add global exception handler and health endpoint"
 ## Phase 7: Frontend — API Layer + Auth Store + Pages
 
 ### Task 7.1: API client + Auth pages
+
+> **Status:** DONE — commit `90e2811` (subagent, 14 files, PR #7)
 
 **Files:** Create `frontend/src/api/client.ts`, `frontend/src/api/auth.ts`, `frontend/src/store/authStore.ts`, `frontend/src/types/index.ts`, `frontend/src/pages/LoginPage.tsx`, `frontend/src/pages/RegisterPage.tsx`, `frontend/src/pages/ForgotPasswordPage.tsx`, `frontend/src/pages/ResetPasswordPage.tsx`, `frontend/src/pages/EmailVerifiedPage.tsx`, `frontend/src/components/common/ProtectedRoute.tsx`, `frontend/src/App.tsx`; Modify `frontend/src/main.tsx`
 
@@ -2636,6 +2642,8 @@ git commit -m "feat: add auth pages with login, register, password reset, routin
 
 ### Task 7.2: Paint library frontend + Photo color picker
 
+> **Status:** DONE — commit `81f4d65` (subagent, 5 files, PR #8)
+
 **Files:** Create `frontend/src/components/paint/PaintList.tsx`, `frontend/src/components/paint/PaintForm.tsx`, `frontend/src/components/paint/PhotoColorPicker.tsx`; Create `frontend/src/store/paintStore.ts`
 
 - [ ] **Step 1: Create PaintList with CRUD**
@@ -2690,6 +2698,8 @@ git commit -m "feat: add paint library UI with CRUD and photo color pickup"
 
 ### Task 8.1: Three.js Material Ball component
 
+> **Status:** DONE — commit `c1a6eb7` (subagent, 10 files incl. Dashboard, PR #9)
+
 **Files:** Create `frontend/src/components/preview3d/MaterialBall.tsx`, `frontend/src/components/preview3d/LightingControls.tsx`, `frontend/src/components/preview3d/MaterialControls.tsx`, `frontend/src/components/preview3d/GeometrySelector.tsx`, `frontend/src/components/preview3d/StlUploader.tsx`
 
 - [ ] **Step 1: Create MaterialBall with React Three Fiber**
@@ -2722,6 +2732,8 @@ git commit -m "feat: add 3D material ball preview with Three.js, STL upload, lig
 ## Phase 9: Mixing + Discord UI
 
 ### Task 9.1: Mix panel + Discord page
+
+> **Status:** DONE — commit `c1a6eb7` (subagent, bundled with 8.1, PR #9)
 
 **Files:** Create `frontend/src/components/mix/TargetColorPicker.tsx`, `frontend/src/components/mix/MixResultCard.tsx`, `frontend/src/components/mix/MixResultList.tsx`; Modify `frontend/src/pages/DiscordPage.tsx`
 
@@ -2756,6 +2768,8 @@ git commit -m "feat: add mixing panel and dashboard with 3-column layout"
 ## Phase 10: Color Wheel + Recipe UI
 
 ### Task 10.1: ColorWheel component + Recipe pages
+
+> **Status:** DONE — commit `2bd63e9` (subagent, 5 files, PR #10)
 
 **Files:** Create `frontend/src/components/mix/ColorWheel.tsx`, `frontend/src/components/recipe/RecipeList.tsx`, `frontend/src/components/recipe/RecipeCard.tsx`; Create `frontend/src/store/recipeStore.ts`
 
@@ -2802,6 +2816,8 @@ git commit -m "feat: add color wheel with harmonies and recipe list UI"
 ## Phase 11: Docker, CI, Makefile, README
 
 ### Task 11.1: CI pipeline + Makefile + README
+
+> **Status:** DONE — commit `76a6af0` (inline, 3 files, PR #11)
 
 **Files:** Create `.github/workflows/ci.yml`, `Makefile`, `README.md`; Modify `docker-compose.yml` if needed
 
@@ -2949,4 +2965,30 @@ Parallelizable pairs:
 
 ---
 
-> **Status:** All phases written. Ready for self-review and handoff.
+> **Status:** All tasks delivered. See Phase 11+ below for post-implementation iterations.
+
+---
+
+## Phase 11+: UI Redesign (2026-05-23 iteration)
+
+> Trigger: User feedback on single-page crowding, 3D preview insufficient size, single-light limitation. See SPEC.md Appendix A.
+
+### Task UI-1: Collapsible sidebar + multi-page routing
+
+> **Status:** DONE — commit `8f21a7d` (subagent, PR #12)
+
+**Files:** Create `Sidebar.tsx`, `Layout.tsx`, `PaintsPage.tsx`, `RecipesPage.tsx`; Modify `App.tsx`; Rename `DashboardPage.tsx` → `WorkspacePage.tsx`
+
+### Task UI-2: 3D enhancement — ground plane + multi-light
+
+> **Status:** DONE — commit `8f21a7d` (subagent, PR #12)
+
+**Files:** Modify `MaterialBall.tsx` (ground plane, multi-light array, drag markers); Rewrite `LightingControls.tsx` (light list, color presets, add/delete, XYZ sliders)
+
+### Task UI-3: Chinese localization
+
+> **Status:** DONE — commit `73c5821` (subagent, 19 files)
+
+### Task UI-4: Dev environment fixes
+
+> **Status:** DONE — commits `23fd09e` (H2 scope), `0ac4dda` (SMTP fallback)
