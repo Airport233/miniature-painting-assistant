@@ -62,3 +62,34 @@
 - Subagent 权限修复（Write/Edit/Bash 加入 allow 列表）后成功运作
 - 两次 subagent dispatch 均按 TDD 红-绿-commit 完成
 - Subagent 展现了合理的自主判断（@DataJpaTest vs @SpringBootTest 选择、@MockBean 使用）
+
+---
+
+## Phase 2: 漆料库
+
+### 2026-05-22 — Task 2.1 Paint CRUD（subagent）
+
+| 项目 | 详情 |
+|------|------|
+| **Commit** | `482f8fc` |
+| **Subagent** | Claude subagent, TDD |
+| **创建文件** | Paint.java, PaintRepository.java, PaintRequest.java, PaintResponse.java, PaintService.java, PaintController.java, PaintServiceTest.java |
+| **TDD** | 红（编译失败）→ 绿（3/3 测试通过）→ 全量 8/8 绿 |
+| **设计决策** | 软删除（is_deleted flag），userId 从 SecurityContext 注入 |
+
+### 2026-05-22 — Task 2.2 Photo Upload（subagent）
+
+| 项目 | 详情 |
+|------|------|
+| **Commit** | `ecd7af2` |
+| **Subagent** | Claude subagent, TDD |
+| **修改文件** | PaintService.java（新增 uploadPhoto 方法），WebConfig.java（新增静态文件映射） |
+| **TDD** | 红（uploadPhoto 不存在）→ 绿（4/4 PaintServiceTest）→ 全量 9/9 绿 |
+| **自主决策** | 使用 Files.createDirectories 确保目录存在，UUID 前缀防止文件名冲突 |
+| **PR** | #3 — merged via gh CLI |
+
+### Phase 2 小结
+
+- 两个 task 均通过 subagent TDD 完成，无人工干预
+- 全量测试回归保持绿（9/9 tests）
+- 漆料库支持 5 个主流品牌 + Other 自定义品牌
