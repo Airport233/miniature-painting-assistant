@@ -46,6 +46,20 @@ class PaintServiceTest {
     }
 
     @Test
+    void shouldUploadPhotoAndUpdateImageUrl() {
+        PaintRequest req = new PaintRequest();
+        req.setBrand("GW"); req.setColorName("PhotoTest"); req.setR(100); req.setG(100); req.setB(100);
+        PaintResponse created = paintService.create(1L, req);
+
+        byte[] dummyPng = new byte[]{(byte)0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A};
+        paintService.uploadPhoto(created.getId(), dummyPng, "test.png");
+
+        PaintResponse updated = paintService.getById(created.getId());
+        assertThat(updated.getImageUrl()).isNotNull();
+        assertThat(updated.getImageUrl()).contains("/uploads/paints/");
+    }
+
+    @Test
     void shouldFilterByBrand() {
         PaintRequest gw = new PaintRequest();
         gw.setBrand("GW"); gw.setColorName("A"); gw.setR(100); gw.setG(100); gw.setB(100);

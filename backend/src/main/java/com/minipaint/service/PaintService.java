@@ -4,15 +4,37 @@ import com.minipaint.dto.PaintRequest;
 import com.minipaint.dto.PaintResponse;
 import com.minipaint.model.Paint;
 import com.minipaint.repository.PaintRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class PaintService {
     private final PaintRepository repo;
     public PaintService(PaintRepository repo) { this.repo = repo; }
+
+    @Value("${app.upload-dir}")
+    private String uploadDir;
+
+    @Transactional
+    public void uploadPhoto(Long paintId, byte[] fileBytes, String filename) {
+        Paint p = repo.findById(paintId).orElseThrow(() -> new RuntimeException("Not found"));
+        try {
+            Path dir = Path.of(uploadDir, "paints");
+            Files.createDirectories(dir);
+            String storedName = UUID.randomUUID() + "_" + filename;
+            Files.write(dir.resolve(storedName), fileBytes);
+            p.setImageUrl("/uploads/paints/" + storedName);
+            repo.save(p);
+        } catch (java.io.IOException e) {
+            throw new RuntimeException("Failed to upload photo", e);
+        }
+    }
 
     @Transactional
     public PaintResponse create(Long userId, PaintRequest req) {
